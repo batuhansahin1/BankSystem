@@ -22,5 +22,9 @@ public class AccountTransaction {
 	//gönderici hesap alıcı hesap da yapabiliriz
 	private String receiverIban;
 	
+	@Column(name = "description")
+	private String description;
+	
+    
 	
 }

@@ -1,4 +1,8 @@
-package com.TurkishFinance.bankSystem.entities;
+package com.TurkishFinance.bankSystem.entities.corporates;
+
+import java.util.List;
+
+import com.TurkishFinance.bankSystem.entities.Customer;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -6,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -28,19 +33,25 @@ public class CorporateCustomer {
 	@Column(name = "corporate_name")
 	private String corporateName;
 	
+	
 	@Column(name="company_type")
 	private String companyType;
 	@Column(name = "corporate_customer_number")
+	@Size(min = 13,max = 13)
 	private long corporateCustomerNumber;
 	@Column(name = "corporate_phone")
 	private String corporatePhone;
 	
-	
+	//keyfine yazdık pk refransı da verebilirdik sadece tcKimlikNoyu burada da tutup diğer tabloya join atmamak
+	//için bu kodu yazdık
 	@OneToOne
 	@JoinColumn(referencedColumnName = "tc_kimlik_no")
 	private Customer customer;
-    @OneToOne
-    @JoinColumn(name = "address_id")
-   private Address address;
+	
+	@OneToMany(mappedBy = "corporateCustomer")
+	private List<CorporateAddress> corporateAddressList;
 
+	@OneToMany(mappedBy = "corporateCustomer")
+	private List<CorporateAccount> corporateAccounts;
+	
 }

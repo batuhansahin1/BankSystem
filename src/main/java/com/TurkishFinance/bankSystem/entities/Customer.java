@@ -1,5 +1,10 @@
 package com.TurkishFinance.bankSystem.entities;
 
+import java.util.Date;
+
+import com.TurkishFinance.bankSystem.entities.corporates.CorporateCustomer;
+import com.TurkishFinance.bankSystem.entities.individuals.IndividualCustomer;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,17 +21,30 @@ public class Customer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-
+	//hesabın sahibinin kimlik bilgileri ortak alanlar olduğu için customer içinde
+	
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name="last_name")
+    private String lastName;
+    
+   
+    @Column(name = "birth_place")
+    private String birthPlace;
+	
+	@Column(name="birth_date")
+	private Date birthDate;
 	
 	@Column(name = "tc_kimlik_no",unique = true,length = 11)
 	private long tcKimlikNo;
 	
-	 
+
 	//bunlara gerek olmaz eğer alan istemiyorsam
 	@OneToOne(mappedBy ="customer")
-	IndividualCustomer individualCustomer;
+	private IndividualCustomer individualCustomer;
 	
 	@OneToOne(mappedBy = "customer")
-	CorporateCustomer corporateCustomer;
+	private CorporateCustomer corporateCustomer; 
+	
 	
 }

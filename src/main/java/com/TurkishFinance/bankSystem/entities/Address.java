@@ -2,11 +2,16 @@ package com.TurkishFinance.bankSystem.entities;
 
 import java.util.List;
 
+import com.TurkishFinance.bankSystem.entities.corporates.CorporateAddress;
+import com.TurkishFinance.bankSystem.entities.individuals.IndividualAddress;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -16,7 +21,6 @@ import lombok.NoArgsConstructor;
 
 @Table(name = "addresses")
 @Entity
-
 public class Address {
 
 	@Id
@@ -38,9 +42,11 @@ public class Address {
 	@Column(name = "gate_number")
 	private int gateNumber;
 	
-	@OneToMany(mappedBy = "address")
-	private List<IndividualCustomer> individualCustomerList;
+    @OneToOne(mappedBy = "address")
+    private CorporateAddress corporateAddress;
+    
+    @OneToOne(mappedBy = "address")
+    private IndividualAddress individualAddress;
 	
-	@OneToOne(mappedBy = "address")
-	private CorporateCustomer corporateCustomer;
+
 }
