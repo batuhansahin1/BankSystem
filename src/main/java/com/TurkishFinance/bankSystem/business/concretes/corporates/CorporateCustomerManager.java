@@ -39,6 +39,9 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	
 		//burada nüfustan veri doğrulayacağız
 		
+		
+		
+		
 	}
 
 }

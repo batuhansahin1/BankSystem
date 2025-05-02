@@ -12,9 +12,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Table(name = "customers")
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
 
 	@Id

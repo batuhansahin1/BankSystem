@@ -1,6 +1,7 @@
 package com.TurkishFinance.bankSystem.webApi.corporates;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,8 +24,11 @@ public class CorporateCustomersController {
 		return corporateCustomerService.getCorporateCustomer(corporateCustomerNumber);
 	}
 	
+	@PostMapping("/add")
 	public void add(CreateCorporateCustomerRequest createCorporateCustomerRequest) {
 		
 		this.corporateCustomerService.addCorporateCustomer(createCorporateCustomerRequest);
 	}
+	
+
 }

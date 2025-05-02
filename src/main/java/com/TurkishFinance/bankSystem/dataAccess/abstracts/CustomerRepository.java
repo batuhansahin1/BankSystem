@@ -8,4 +8,6 @@ import com.TurkishFinance.bankSystem.entities.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
+	boolean existsByTcKimlikNo(long tcKimlikNo);
+
 }
