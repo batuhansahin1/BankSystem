@@ -10,6 +10,6 @@ public interface IndividualCustomerService {
 
 	GetIndividualCustomerResponse getIndividualCustomer(long individualCustomerNumber);
 
-	void createIndividualCustomer(CreateIndividualCustomerRequest createIndividualCustomerRequest);
+	void createIndividualCustomer(CreateIndividualCustomerRequest createIndividualCustomerRequest) throws Exception;
 
 }

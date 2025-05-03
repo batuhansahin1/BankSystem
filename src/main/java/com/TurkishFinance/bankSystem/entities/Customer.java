@@ -1,5 +1,6 @@
 package com.TurkishFinance.bankSystem.entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.TurkishFinance.bankSystem.entities.corporates.CorporateCustomer;
@@ -39,10 +40,10 @@ public class Customer {
     private String birthPlace;
 	
 	@Column(name="birth_date")
-	private Date birthDate;
+	private LocalDate birthDate;
 	
 	@Column(name = "tc_kimlik_no",unique = true,length = 11)
-	private long tcKimlikNo;
+	private String tcKimlikNo;
 	
 
 	//bunlara gerek olmaz eğer alan istemiyorsam

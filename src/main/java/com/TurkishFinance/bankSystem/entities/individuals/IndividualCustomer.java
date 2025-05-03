@@ -14,9 +14,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
  
 @Table(name = "individual_customers")
 @Entity
+@AllArgsConstructor
+@Data
+@NoArgsConstructor
 public class IndividualCustomer  {
 
 	@Id

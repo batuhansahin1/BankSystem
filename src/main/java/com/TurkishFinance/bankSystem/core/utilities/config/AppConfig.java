@@ -16,7 +16,8 @@ public class AppConfig {
 		return new ModelMapper();
 	}
 	
-	@Bean WebClient webClient() {
+	@Bean 
+	public WebClient webClient() {
 		return WebClient.builder().build();
 	}
 }
