@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetCorporateCustomerResponse {
+public class GetAllCorporateCustomersResponse {
 
 	private String customerFirstName;
-    private String customerLastName;
-    private String corporateName;
-    private String corporatePhone;
+	private String customerLastName;
+	private String customerTcKimlikNo;
+	private String individualCustomerNumber;
+	private String corporatePhone;
 	private String vergiKimlikNo;
-	
+	private String corporateName;
 }

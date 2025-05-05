@@ -8,4 +8,5 @@ import com.TurkishFinance.bankSystem.entities.corporates.CorporateAccount;
 @Repository
 public interface CorporateAccountRepository extends JpaRepository<CorporateAccount, Integer> {
 
+	
 }

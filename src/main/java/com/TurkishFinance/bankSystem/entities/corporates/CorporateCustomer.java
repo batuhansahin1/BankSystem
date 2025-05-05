@@ -30,7 +30,7 @@ public class CorporateCustomer {
 	private int id;
 	
 	@Column(name = "v_kimlik_no",length = 10)
-	private String vKimlikNo;
+	private String vergiKimlikNo;
 	
 	@Column(name = "corporate_name")
 	private String corporateName;

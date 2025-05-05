@@ -1,5 +1,6 @@
 package com.TurkishFinance.bankSystem.entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.TurkishFinance.bankSystem.entities.corporates.CorporateAccount;
@@ -11,21 +12,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 
 @Table(name = "accounts")
 @Entity
+
 public class Account {
 
 	@Id
 	@GeneratedValue
 	private int id;
 	
-	@Column(name = "account_number")
-    private int accountNumber;
+	@Column(name = "account_number",unique = true)
+	@Size(min = 16,max = 16)
+    private String accountNumber;
     
 	
 	@Column(name = "opened_date")
-    private Date openedDate;
+    private LocalDate openedDate;
 	
 	@Column(name = "total_amount")
 	private long totalAmount;

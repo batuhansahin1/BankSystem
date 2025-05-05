@@ -1,5 +1,6 @@
 package com.TurkishFinance.bankSystem.business.requests;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -33,17 +34,17 @@ public class CreateCorporateCustomerRequest {
 		
 		@NotEmpty
 		@NotNull
-		private Date birthDate;
+		private LocalDate birthDate;
 		
 		@NotEmpty
 		@NotNull
 		@Size(min=11,max = 11)
-		private long tcKimlikNo;
+		private String tcKimlikNo;
 
 	   @Size(min = 10,max = 10)
 	   @NotNull
 	   @NotEmpty
-	   private String vKimlikNo;
+	   private String vergiKimlikNo;
 	
 	   @Size(max = 30)
 	   @NotNull

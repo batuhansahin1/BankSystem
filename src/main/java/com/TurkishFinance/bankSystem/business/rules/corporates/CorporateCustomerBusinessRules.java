@@ -1,7 +1,13 @@
 package com.TurkishFinance.bankSystem.business.rules.corporates;
 
+import org.springframework.stereotype.Service;
+
 import com.TurkishFinance.bankSystem.dataAccess.abstracts.corporates.CorporateCustomerRepository;
 
+import lombok.AllArgsConstructor;
+
+@Service
+@AllArgsConstructor
 public class CorporateCustomerBusinessRules {
 	
 	private CorporateCustomerRepository corporateCustomerRepository;

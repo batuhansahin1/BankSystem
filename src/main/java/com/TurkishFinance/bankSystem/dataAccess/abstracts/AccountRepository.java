@@ -9,4 +9,6 @@ import com.TurkishFinance.bankSystem.entities.Account;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 
+	boolean existsByAccountNumber(String accountNumber);
+    Account findByAccountNumber(String accountNumber);
 }

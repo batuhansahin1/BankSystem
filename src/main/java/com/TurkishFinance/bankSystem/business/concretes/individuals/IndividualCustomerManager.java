@@ -1,12 +1,15 @@
 package com.TurkishFinance.bankSystem.business.concretes.individuals;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.TurkishFinance.bankSystem.business.abstracts.individuals.IndividualCustomerService;
 import com.TurkishFinance.bankSystem.business.requests.CreateIndividualCustomerRequest;
+import com.TurkishFinance.bankSystem.business.responses.GetAllIndividualCustomersResponse;
 import com.TurkishFinance.bankSystem.business.responses.GetIndividualCustomerResponse;
 import com.TurkishFinance.bankSystem.business.rules.CustomerBusinessRules;
 import com.TurkishFinance.bankSystem.business.rules.individuals.IndividualCustomerBusinessRules;
@@ -87,6 +90,16 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		 
 		 }
 		
+	}
+
+	@Override
+	public List<GetAllIndividualCustomersResponse> getAll() {
+		List<IndividualCustomer> individualCustomers=this.individualCustomerRepository.findAll();
+		List<GetAllIndividualCustomersResponse> individualCustomersResponse=individualCustomers.stream()
+				.map(indCust->this.modelMapperService.forResponse().map(indCust,GetAllIndividualCustomersResponse.class)).collect(Collectors.toList());
+		
+		
+		return individualCustomersResponse;
 	}
     
 }

@@ -18,7 +18,7 @@ public class CorporateAccount {
 	private int id;
 
 	@OneToOne
-	@JoinColumn(name = "address_id")
+	@JoinColumn(referencedColumnName = "account_number")
 	private Account account;
 	
 	@ManyToOne

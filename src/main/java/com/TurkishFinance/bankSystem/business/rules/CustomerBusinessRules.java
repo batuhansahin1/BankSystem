@@ -19,5 +19,12 @@ public class CustomerBusinessRules {
 		}
 		
 	}
+
+	public void checkIfIdExists(int id) {
+		if(!this.customerRepository.existsById(id)) {
+			System.out.println("bu id'ye ait bir customer  kaydı yok");
+		}
+		
+	}
 	
 }
