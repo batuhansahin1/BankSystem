@@ -19,7 +19,7 @@ public class CorporateCustomerBusinessRules {
 		}
 	}
 	
-	public void checkIfCorporateCustomerNumberExists(long corporateCustomerNumber) throws Exception {
+	public void checkIfCorporateCustomerNumberExists(String corporateCustomerNumber) throws Exception {
 		
 		if(!this.corporateCustomerRepository.existsByCorporateCustomerNumber(corporateCustomerNumber)) {
 			throw new Exception("Bu idye ait kayıt sistemde bulunamadı");

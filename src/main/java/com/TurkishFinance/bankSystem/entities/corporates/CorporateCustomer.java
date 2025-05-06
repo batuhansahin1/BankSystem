@@ -40,7 +40,7 @@ public class CorporateCustomer {
 	private String companyType;
 	@Column(name = "corporate_customer_number")
 	@Size(min = 13,max = 13)
-	private long corporateCustomerNumber;
+	private String corporateCustomerNumber;
 	@Column(name = "corporate_phone")
 	private String corporatePhone;
 	

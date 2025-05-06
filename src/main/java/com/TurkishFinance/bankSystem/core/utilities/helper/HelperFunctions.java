@@ -14,7 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+
 
 @AllArgsConstructor
 @Component
@@ -43,7 +43,15 @@ public class HelperFunctions {
 	
 	return response;
 	}
-	
+	public Map<String,Object> postAccount(String url,Map<String,Object> requestObject) throws JsonProcessingException {
+		
+		ObjectMapper mapper=new ObjectMapper();
+		String json=mapper.writeValueAsString(requestObject);
+		Map<String,Object> response=webClient.post().uri(url).bodyValue(json).retrieve().bodyToMono(new ParameterizedTypeReference<Map<String,Object>>() {
+		}).block();
+		
+		return response;
+	}
 	
 	//boşuna upraşıyorum post request'i sadece tKimlikNo ile yapıcaz ve gelen response'yi döndürücez yok create requestte istenilen her şeyi göndermemiz lazım
 	public void post(String url,CorporateCustomer customer) throws JsonProcessingException {

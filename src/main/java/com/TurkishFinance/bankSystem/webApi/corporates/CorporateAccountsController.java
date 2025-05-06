@@ -14,6 +14,7 @@ import com.TurkishFinance.bankSystem.business.requests.CreateCorporateAccountReq
 import com.TurkishFinance.bankSystem.business.requests.UpdateCorporateAccountRequest;
 import com.TurkishFinance.bankSystem.business.responses.GetAllCorporateAccountsResponse;
 import com.TurkishFinance.bankSystem.business.responses.GetCorporateAccountResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.AllArgsConstructor;
 
@@ -37,7 +38,7 @@ public class CorporateAccountsController {
 	}
 	
 	@PostMapping("/add")
-	public void add(CreateCorporateAccountRequest createCorporateAccountRequest) {
+	public void add(CreateCorporateAccountRequest createCorporateAccountRequest) throws JsonProcessingException {
 		
 		this.corporateAccountService.add(createCorporateAccountRequest);
 	}

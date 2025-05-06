@@ -10,7 +10,7 @@ import com.TurkishFinance.bankSystem.business.responses.GetCorporateCustomerResp
 public interface CorporateCustomerService {
 
 	
-	public GetCorporateCustomerResponse getCorporateCustomer(long corporateCustomerNumber);
+	public GetCorporateCustomerResponse getCorporateCustomer(String corporateCustomerNumber);
 
 	public void addCorporateCustomer(CreateCorporateCustomerRequest createCorporateCustomerRequest) throws Exception;
 

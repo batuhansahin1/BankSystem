@@ -9,6 +9,6 @@ import com.TurkishFinance.bankSystem.entities.corporates.CorporateCustomer;
 public interface CorporateCustomerRepository extends JpaRepository<CorporateCustomer, Integer> {
 
 	
-	boolean existsByCorporateCustomerNumber(long corporateCustomerNumber);
-	CorporateCustomer findByCorporateCustomerNumber(long corporateCustomerNumber);
+	boolean existsByCorporateCustomerNumber(String corporateCustomerNumber);
+	CorporateCustomer findByCorporateCustomerNumber(String corporateCustomerNumber);
 }

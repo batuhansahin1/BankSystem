@@ -22,7 +22,7 @@ public class CorporateCustomersController {
 	private final CorporateCustomerService corporateCustomerService;
 	
 	@GetMapping("/get")
-	public GetCorporateCustomerResponse getCorporateCustomer( long corporateCustomerNumber) {
+	public GetCorporateCustomerResponse getCorporateCustomer( String corporateCustomerNumber) {
 		
 		return corporateCustomerService.getCorporateCustomer(corporateCustomerNumber);
 	}

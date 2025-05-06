@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 
 @Table(name = "accounts")
 @Entity
-
+//bu classın hepsini biz oluşturacağımız için ilişkilendirilen customer'ın numarasını alsak yeterli
 public class Account {
 
 	@Id
@@ -26,26 +26,38 @@ public class Account {
 	
 	@Column(name = "account_number",unique = true)
 	@Size(min = 16,max = 16)
+	//biz oluşturucaz
     private String accountNumber;
     
 	
 	@Column(name = "opened_date")
+	//biz oluşturucaz
     private LocalDate openedDate;
 	
 	@Column(name = "total_amount")
+	//biz oluşturuaz
 	private long totalAmount;
 	
 	@Column(name = "account_status")
 	private String status;
 	
 	@Column(name = "iban_number")
+	//merkez bankasından alıcaz
 	private String ibanNumber;
+	
+	
+	@Column(name = "account_currency")
+	@Size(min = 2,max = 3)
+	private String accountCurrency;
 	
 	@OneToOne(mappedBy = "account")
 	private IndividualAccount individualAccount;
 	
 	@OneToOne(mappedBy = "account")
 	private CorporateAccount corporateAccount;
+	
+	//customerların bağlı olduğu ana class için tc ile çekip merkez bankasında yollicaz 
+	//o da doğru mu diye kontrol edicek
 	
 	//ikiye ayrılacak individualCustomerAccount,CorporateCustomerAccount diye çünkü aynı address gibi olucaktı
 	//2 customer'ın field'ı var biri boş kalıcak

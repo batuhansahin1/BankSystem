@@ -35,7 +35,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	
 	
 	@Override
-	public GetCorporateCustomerResponse getCorporateCustomer(long corporateCustomerNumber) {
+	public GetCorporateCustomerResponse getCorporateCustomer(String corporateCustomerNumber) {
 		
 		try {
 			
@@ -77,7 +77,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 			customer.setTcKimlikNo(createCorporateCustomerRequest.getTcKimlikNo());
 			corporateCustomer.setCustomer(customer);
 			corporateCustomer.setCompanyType(createCorporateCustomerRequest.getCompanyType());
-			corporateCustomer.setCorporateCustomerNumber(0001);
+			corporateCustomer.setCorporateCustomerNumber("0001");
 			corporateCustomer.setCorporateName(createCorporateCustomerRequest.getCorporateName());
 			corporateCustomer.setCorporatePhone(createCorporateCustomerRequest.getCorporatePhone());
 			corporateCustomer.setVergiKimlikNo(createCorporateCustomerRequest.getVergiKimlikNo());

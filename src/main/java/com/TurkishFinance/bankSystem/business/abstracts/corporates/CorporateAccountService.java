@@ -6,6 +6,7 @@ import com.TurkishFinance.bankSystem.business.requests.CreateCorporateAccountReq
 import com.TurkishFinance.bankSystem.business.requests.UpdateCorporateAccountRequest;
 import com.TurkishFinance.bankSystem.business.responses.GetAllCorporateAccountsResponse;
 import com.TurkishFinance.bankSystem.business.responses.GetCorporateAccountResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 
 public interface CorporateAccountService {
@@ -14,7 +15,7 @@ public interface CorporateAccountService {
 
 	List<GetAllCorporateAccountsResponse> getAll();
 
-	void add(CreateCorporateAccountRequest createCorporateAccountRequest);
+	void add(CreateCorporateAccountRequest createCorporateAccountRequest) throws JsonProcessingException;
 
 	//delete'yi de request ile yapabiliriz ama gerek yok 
 	void delete(String customerNumber);
