@@ -65,6 +65,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		if(!responseObj.get("firstName").equals(createCorporateCustomerRequest.getFirstName())||
 		   !responseObj.get("lastName").equals(createCorporateCustomerRequest.getLastName())||
 		   !responseObj.get("birthPlace").equals(createCorporateCustomerRequest.getBirthPlace())) {
+			//validation exception
 			throw new Exception("veriler doğrulanamadı");
 		}
 		else {
@@ -77,7 +78,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 			customer.setTcKimlikNo(createCorporateCustomerRequest.getTcKimlikNo());
 			corporateCustomer.setCustomer(customer);
 			corporateCustomer.setCompanyType(createCorporateCustomerRequest.getCompanyType());
-			corporateCustomer.setCorporateCustomerNumber("0001");
+			corporateCustomer.setCorporateCustomerNumber("0000000000003");
 			corporateCustomer.setCorporateName(createCorporateCustomerRequest.getCorporateName());
 			corporateCustomer.setCorporatePhone(createCorporateCustomerRequest.getCorporatePhone());
 			corporateCustomer.setVergiKimlikNo(createCorporateCustomerRequest.getVergiKimlikNo());

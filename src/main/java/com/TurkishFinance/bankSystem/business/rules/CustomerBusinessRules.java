@@ -2,6 +2,7 @@ package com.TurkishFinance.bankSystem.business.rules;
 
 import org.springframework.stereotype.Service;
 
+import com.TurkishFinance.bankSystem.core.utilities.exceptions.BusinessException;
 import com.TurkishFinance.bankSystem.dataAccess.abstracts.CustomerRepository;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ public class CustomerBusinessRules {
 		
 		if(this.customerRepository.existsByTcKimlikNo(tcKimlikNo)) {
 			System.out.println("bu tcye ait bir customer var kayıt alınamaz");
+			throw new BusinessException("bu tcye ait bir customer var kayıt alınamaz");
 		}
 		
 	}

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.catalina.mapper.Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.TurkishFinance.bankSystem.business.abstracts.corporates.CorporateAccountService;
 import com.TurkishFinance.bankSystem.business.requests.CreateCorporateAccountRequest;
@@ -66,22 +67,15 @@ public class CorporateAccountManager implements CorporateAccountService {
 		CorporateCustomer corporateCustomer=this.corporateCustomerRepository.findByCorporateCustomerNumber(createCorporateAccountRequest.getCorporateCustomerNumber());
 		//bu customer'a ait bilgilerle request yapıcaz
 		//accountNo'yu da biz oluşturucaz 00000000000000001
-		Map<String, Object> requestObj=new HashMap<>();
-		
-		requestObj.put("personTcKimlikNo", corporateCustomer.getCustomer().getTcKimlikNo());
-		requestObj.put("personFirstName", corporateCustomer.getCustomer().getFirstName());
-		requestObj.put("personLastName", corporateCustomer.getCustomer().getLastName());
-		requestObj.put("personBirthDate", corporateCustomer.getCustomer().getBirthDate());
-		requestObj.put("pesonBirthPlace", corporateCustomer.getCustomer().getBirthPlace());
-		//bankanın vKimlikNosu
-		requestObj.put("vKimlikNo","0000000001");
-		
-		requestObj.put("bankCode", "00001");
-        requestObj.put("accountNo", "0000000000000001");
-        requestObj.put("accountCurrency", createCorporateAccountRequest.getAccountCurrency());
+
         //buralara gerek yok request için biz zaten fonksiyon yazdık
         //bu post fonksiyonunu genelleştireceğim
-     Map<String, Object> fastSystemResponse=helperFunctions.postAccount("http://localhost:9090/api/personaccounts/add",requestObj);
+        UriComponentsBuilder uri= UriComponentsBuilder.fromHttpUrl("http://localhost:9090/api/personaccounts/add")
+        		.queryParam("personTcKimlikNo",corporateCustomer.getCustomer().getTcKimlikNo())
+        		.queryParam("bankName", "ziraat").queryParam("vergiKimlikNo","1111111111")
+        		.queryParam("bankCode", "00001").queryParam("accountNo", "1111111111111111")
+        		.queryParam("accountCurrency",createCorporateAccountRequest.getAccountCurrency());
+     Map<String, Object> fastSystemResponse=helperFunctions.postAccount(uri.toUriString());
 		/*
 		 * ObjectMapper mapper=new ObjectMapper(); String
 		 * jsonString=mapper.writeValueAsString(requestObj);
