@@ -8,5 +8,10 @@ import com.TurkishFinance.bankSystem.entities.corporates.CorporateAccount;
 @Repository
 public interface CorporateAccountRepository extends JpaRepository<CorporateAccount, Integer> {
 
+	CorporateAccount findByAccountAccountNumber(String accountNumber);
+	
+	//void deleteByAccountAccountNumber(String accountNumber);
+
+	boolean existsByAccountAccountNumber(String accountNumber);
 	
 }

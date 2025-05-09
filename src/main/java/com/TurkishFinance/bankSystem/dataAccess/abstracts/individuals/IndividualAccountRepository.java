@@ -8,4 +8,8 @@ import com.TurkishFinance.bankSystem.entities.individuals.IndividualAccount;
 @Repository
 public interface IndividualAccountRepository extends JpaRepository<IndividualAccount, Integer> {
 
+	
+	boolean existsByAccountAccountNumber(String accountNumber);
+	IndividualAccount findByAccountAccountNumber(String accountNumber);
+	
 }

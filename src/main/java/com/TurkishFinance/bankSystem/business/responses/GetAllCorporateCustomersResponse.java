@@ -12,7 +12,7 @@ public class GetAllCorporateCustomersResponse {
 	private String customerFirstName;
 	private String customerLastName;
 	private String customerTcKimlikNo;
-	private String individualCustomerNumber;
+	private String corporateCustomerNumber;
 	private String corporatePhone;
 	private String vergiKimlikNo;
 	private String corporateName;

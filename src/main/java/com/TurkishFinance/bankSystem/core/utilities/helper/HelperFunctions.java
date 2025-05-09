@@ -22,6 +22,14 @@ public class HelperFunctions {
 
 	private final WebClient webClient;
 	
+	public String createAccountNumber() {
+		String accountNumber="";
+		for(int i=0;i<16;i++) {
+			accountNumber+=Math.round(Math.random()*9);
+		}
+		return accountNumber;
+	}
+	
 	//gneric olarak post ve get request oluşturacağız
 	public String urlBuilder(String url,String parameter) {
 		String url1 = UriComponentsBuilder.fromHttpUrl(url)

@@ -15,7 +15,7 @@ public interface CorporateAccountService {
 
 	List<GetAllCorporateAccountsResponse> getAll();
 
-	void add(CreateCorporateAccountRequest createCorporateAccountRequest) throws JsonProcessingException;
+	void add(CreateCorporateAccountRequest createCorporateAccountRequest) throws JsonProcessingException, Exception;
 
 	//delete'yi de request ile yapabiliriz ama gerek yok 
 	void delete(String customerNumber);
