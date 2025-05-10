@@ -116,6 +116,7 @@ public class CorporateAccountManager implements CorporateAccountService {
         account.setIbanNumber(fastSystemResponse.get("ibanNumber").toString());
         account.setOpenedDate(LocalDate.now());
         account.setTotalAmount(0);
+        account.setStatus("active");       
         accountRepository.save(account);
         CorporateAccount corporateAccount=new CorporateAccount();
         corporateAccount.setAccount(account);

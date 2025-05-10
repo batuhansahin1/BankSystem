@@ -20,4 +20,12 @@ public class IndividualAccountBusinessRules {
 		
 	}
 
+	public void chekIfCustomerExists(String customerNumber) {
+
+		if(!individualAccountRepository.existsByIndividualCustomerIndividualCustomerNumber(customerNumber)) {
+			 throw new BusinessException("There is no customer with that customerNumber pls check and try again");
+		}
+		
+	}
+
 }

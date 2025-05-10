@@ -11,7 +11,7 @@ import com.TurkishFinance.bankSystem.business.responses.GetIndividualCustomerRes
 
 public interface IndividualCustomerService {
 
-	GetIndividualCustomerResponse getIndividualCustomer(long individualCustomerNumber);
+	GetIndividualCustomerResponse getIndividualCustomer(String individualCustomerNumber);
 
 	void createIndividualCustomer(CreateIndividualCustomerRequest createIndividualCustomerRequest) throws Exception;
     List<GetAllIndividualCustomersResponse> getAll();

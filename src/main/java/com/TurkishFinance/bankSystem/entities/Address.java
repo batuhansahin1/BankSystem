@@ -1,6 +1,6 @@
 package com.TurkishFinance.bankSystem.entities;
 
-import java.util.List;
+
 
 import com.TurkishFinance.bankSystem.entities.corporates.CorporateAddress;
 import com.TurkishFinance.bankSystem.entities.individuals.IndividualAddress;
@@ -10,9 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,6 +18,9 @@ import lombok.NoArgsConstructor;
 
 @Table(name = "addresses")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Address {
 
 	@Id
@@ -33,6 +33,7 @@ public class Address {
 	@Column(name = "county_name")
 	private String county;
 	
+	//mahalle
 	@Column(name = "neighborhood")
 	private String neighborhood;
 	@Column(name = "street")

@@ -56,8 +56,11 @@ public class CreateCorporateCustomerRequest {
 	   @Size(max = 20)
 	   private String companyType;
 	
+	   //alan koduyla birlikte normalde kurumsal da kişisel de telefon 10 haneli 0 hariç amaalan koduyla +90
+	   //3 tane ekleniyo
 	   @NotEmpty
 	   @NotNull
+	   @Size(min = 13,max = 13)
 	   private String corporatePhone;
 	
 	//şimdi customer tablosundan bu tcye ait customer nesnesini çekip bunu CorporateCustomer'daki customer değişkenine atayacağım

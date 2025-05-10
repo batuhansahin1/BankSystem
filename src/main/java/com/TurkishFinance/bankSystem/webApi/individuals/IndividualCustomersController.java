@@ -22,7 +22,7 @@ public class IndividualCustomersController {
 	private IndividualCustomerService individualCustomerService;
 	
 	@GetMapping("/get")
-	public GetIndividualCustomerResponse getIndividualCustomer(long individualCustomerNumber) {
+	public GetIndividualCustomerResponse getIndividualCustomer(String individualCustomerNumber) {
 		
 		return this.individualCustomerService.getIndividualCustomer(individualCustomerNumber);
 	}

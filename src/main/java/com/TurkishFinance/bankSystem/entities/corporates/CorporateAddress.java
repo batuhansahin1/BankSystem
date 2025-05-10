@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 @Table(name = "corporate_addresses")
 @Entity
@@ -20,13 +21,16 @@ public class CorporateAddress {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	@Size(min = 8,max = 8)
+	@JoinColumn(name = "corporate_address_number")
+	private String corporateAddressNumber;
 	@OneToOne
 	@JoinColumn(name = "address_id")
 	private Address address;
 	
 	
 	@ManyToOne
-	@JoinColumn(name = "corporate_customer_id")
+	@JoinColumn(referencedColumnName = "corporate_customer_number")
 	private CorporateCustomer corporateCustomer;
 	
 

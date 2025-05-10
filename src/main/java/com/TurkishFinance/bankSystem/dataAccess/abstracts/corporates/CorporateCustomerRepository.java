@@ -11,4 +11,5 @@ public interface CorporateCustomerRepository extends JpaRepository<CorporateCust
 	
 	boolean existsByCorporateCustomerNumber(String corporateCustomerNumber);
 	CorporateCustomer findByCorporateCustomerNumber(String corporateCustomerNumber);
+	boolean existsByCustomerTcKimlikNo(String tcKimlikNo);
 }

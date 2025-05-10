@@ -9,8 +9,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class IndividualAccount {
 
 	@Id
@@ -19,10 +25,10 @@ public class IndividualAccount {
 	
 	
 	@OneToOne
-	@JoinColumn(name = "account_id")
+	@JoinColumn(referencedColumnName =  "account_number")
 	private Account account ; 
 	
 	@ManyToOne
-	@JoinColumn(name = "individual_customer_id")
+	@JoinColumn(referencedColumnName =  "individual_customer_number")
 	private IndividualCustomer individualCustomer;
 }

@@ -31,7 +31,7 @@ public class IndividualCustomer  {
 	
 	@Column(name = "individual_customer_number",unique = true)
 	@Size(min = 12,max = 12)
-	private long individualCustomerNumber;
+	private String individualCustomerNumber;
 	
 	@Column(name = "phone_number")
 	@Size(min =12 ,max=14)

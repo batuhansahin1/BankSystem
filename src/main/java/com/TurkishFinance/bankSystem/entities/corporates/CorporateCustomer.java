@@ -38,7 +38,7 @@ public class CorporateCustomer {
 	
 	@Column(name="company_type")
 	private String companyType;
-	@Column(name = "corporate_customer_number")
+	@Column(name = "corporate_customer_number",unique = true)
 	@Size(min = 13,max = 13)
 	private String corporateCustomerNumber;
 	@Column(name = "corporate_phone")

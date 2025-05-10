@@ -2,6 +2,7 @@ package com.TurkishFinance.bankSystem.business.concretes.corporates;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -37,13 +38,10 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	@Override
 	public GetCorporateCustomerResponse getCorporateCustomer(String corporateCustomerNumber) {
 		
-		try {
+	
 			
 			this.corporateCustomerBusinessRules.checkIfCorporateCustomerNumberExists(corporateCustomerNumber);
-		}
-		catch (Exception e) {
-		System.out.println(e.getMessage());
-		}
+
 		CorporateCustomer corporateCustomer=this.corporateCustomerReqpository.findByCorporateCustomerNumber(corporateCustomerNumber);
         GetCorporateCustomerResponse customerResponse=this.modelMapperService.forResponse()
         		.map(corporateCustomer, GetCorporateCustomerResponse.class);
@@ -53,9 +51,19 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
 	@Override
 	public void addCorporateCustomer(CreateCorporateCustomerRequest createCorporateCustomerRequest) throws Exception {
-	
-	   this.customerBusinessRules.checkIfTcKimlikNoExists(createCorporateCustomerRequest.getTcKimlikNo());
+	  //bu tcye ait bir corporatecustomer varsa yeniden oluşturamamyız
+	   this.corporateCustomerBusinessRules.checkIfTcKimlikNoExists(createCorporateCustomerRequest.getTcKimlikNo());
+	   
+	   //customer'da kişi bilgileri var ama corporatede yoksa yani müşteri individual daha sonra 
+	   //corporate hesap açıyorsa onu customer tablosundaki veriyle ilişkilendirmemiz lazım yoksa aynı veriyi bir daha 
+	   //customer tablosuna eklemiş oluruz
+	   Optional<Customer> optionalCustomer=this.customerRepository
+			   .findByTcKimlikNo(createCorporateCustomerRequest.getTcKimlikNo());
+	   
+
 	   //burada nüfustan veri doğrulayacağız
+       //veritabanımızda böyle bir kayıt varsa http request'e gerek yok
+	   //güncel veriyi almak için request atıyoruz
 	   String url=UriComponentsBuilder.fromHttpUrl("http://localhost:9091/api/person/getPerson")
 			   .queryParam("tcKimlikNo", createCorporateCustomerRequest.getTcKimlikNo()).toUriString();
 	   
@@ -68,26 +76,29 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 			//validation exception
 			throw new Exception("veriler doğrulanamadı");
 		}
-		else {
-			CorporateCustomer corporateCustomer=this.modelMapperService.forRequest().map(createCorporateCustomerRequest, CorporateCustomer.class);
-			Customer customer=new Customer();
-			customer.setFirstName(createCorporateCustomerRequest.getFirstName());
-			customer.setLastName(createCorporateCustomerRequest.getLastName());
-			customer.setBirthDate(createCorporateCustomerRequest.getBirthDate());
-			customer.setBirthPlace(createCorporateCustomerRequest.getBirthPlace());
-			customer.setTcKimlikNo(createCorporateCustomerRequest.getTcKimlikNo());
-			corporateCustomer.setCustomer(customer);
+		
+		CorporateCustomer corporateCustomer=this.modelMapperService.forRequest().map(createCorporateCustomerRequest, CorporateCustomer.class);
+		   if(optionalCustomer.isPresent()) {
+			corporateCustomer.setCustomer(optionalCustomer.get());   
+		   }	
+		
+		   else {
+			   
+			   Customer customer=new Customer();
+			   customer.setFirstName(createCorporateCustomerRequest.getFirstName());
+			   customer.setLastName(createCorporateCustomerRequest.getLastName());
+			   customer.setBirthDate(createCorporateCustomerRequest.getBirthDate());
+			   customer.setBirthPlace(createCorporateCustomerRequest.getBirthPlace());
+			   customer.setTcKimlikNo(createCorporateCustomerRequest.getTcKimlikNo());
+			   corporateCustomer.setCustomer(customer);
+			   this.customerRepository.save(customer);
+		   }
 			corporateCustomer.setCompanyType(createCorporateCustomerRequest.getCompanyType());
-			corporateCustomer.setCorporateCustomerNumber("0000000000003");
+			corporateCustomer.setCorporateCustomerNumber(helperFunctions.createCorporateCustomerNumber());
 			corporateCustomer.setCorporateName(createCorporateCustomerRequest.getCorporateName());
 			corporateCustomer.setCorporatePhone(createCorporateCustomerRequest.getCorporatePhone());
 			corporateCustomer.setVergiKimlikNo(createCorporateCustomerRequest.getVergiKimlikNo());
-			this.customerRepository.save(customer);
 			this.corporateCustomerReqpository.save(corporateCustomer);
-			
-		}
-		
-		
 	}
 
 	@Override

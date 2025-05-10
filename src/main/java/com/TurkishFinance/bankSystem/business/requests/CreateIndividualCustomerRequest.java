@@ -29,7 +29,7 @@ public class CreateIndividualCustomerRequest {
 	private String lastName;
 	@NotNull
 	@NotEmpty
-	@Size(min = 10,max = 10)
+	@Size(min = 13,max = 13)
 	private String phoneNumber;
 	
 	@NotNull

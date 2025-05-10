@@ -28,7 +28,7 @@ public class CorporateAccount {
 	private Account account;
 	
 	@ManyToOne
-	@JoinColumn(name = "corporate_customer_id")
+	@JoinColumn(referencedColumnName =  "corporate_customer_number")
 	private CorporateCustomer corporateCustomer;
 	
 	

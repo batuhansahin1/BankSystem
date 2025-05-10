@@ -2,6 +2,7 @@ package com.TurkishFinance.bankSystem.business.concretes.individuals;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -32,9 +33,10 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	private final IndividualCustomerBusinessRules individualCustomerBusinessRules;
 	private final CustomerBusinessRules customerBusinessRules;
 	private final CustomerRepository customerRepository;
+
 	
 	@Override
-	public GetIndividualCustomerResponse getIndividualCustomer(long individualCustomerNumber) {
+	public GetIndividualCustomerResponse getIndividualCustomer(String individualCustomerNumber) {
 		//businessruless
 		this.individualCustomerBusinessRules.checkIfExistsByCustomerNumber(individualCustomerNumber);
 		
@@ -46,8 +48,15 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	@Override
 	public void createIndividualCustomer(CreateIndividualCustomerRequest createIndividualCustomerRequest) throws Exception {
 		// TODO Auto-generated method stub
-		this.customerBusinessRules.checkIfTcKimlikNoExists(createIndividualCustomerRequest.getTcKimlikNo());
+		//this.customerBusinessRules.checkIfTcKimlikNoExists(createIndividualCustomerRequest.getTcKimlikNo());
+		//bu varsa zaten ekleyemeyiz
+		this.individualCustomerBusinessRules.checkIfTcKimlikNoExists(createIndividualCustomerRequest.getTcKimlikNo());
 		
+		 IndividualCustomer individualCustomer=new IndividualCustomer();
+		Optional<Customer> optionalCustomer=this.customerRepository
+				.findByTcKimlikNo(createIndividualCustomerRequest.getTcKimlikNo());
+	
+		//customerda varsa onu save etmeyelim
 		//nüfusa request atılacak veri doğrulanıp devam edilecek
 		
 		String url = UriComponentsBuilder.fromHttpUrl("http://localhost:9091/api/person/getPerson")
@@ -70,27 +79,35 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 			 throw new Exception("girilen veriler ile gerçek veriler eşelşmiyor kontrol edip tekrar deneyin");
 			 
 		 }
-		 else {
-			 IndividualCustomer individualCustomer=new IndividualCustomer();
+		 
+			if(optionalCustomer.isPresent()) {
+				//olan bir customer'ı set etmemek için bunu yapmam lazım
+				individualCustomer.setCustomer(optionalCustomer.get());
+			}
+			else {
+				 Customer customer=new Customer();
+			 customer.setFirstName(createIndividualCustomerRequest.getFirstName());
+			 customer.setLastName(createIndividualCustomerRequest.getLastName());
+			 customer.setTcKimlikNo(createIndividualCustomerRequest.getTcKimlikNo());
+			 customer.setBirthDate(createIndividualCustomerRequest.getCustomerBirthDate());
+			 System.out.println(responseObject.get("birthPlace").toString());
+			 customer.setBirthPlace(createIndividualCustomerRequest.getCustomerBirthPlace());
+			 this.customerRepository.save(customer);
+			 individualCustomer.setCustomer(customer);
+			}
+		
 					 //this.modelMapperService.forRequest().map(createIndividualCustomerRequest, IndividualCustomer.class);
-			 Customer customer=new Customer();
-		 customer.setFirstName(createIndividualCustomerRequest.getFirstName());
-		 customer.setLastName(createIndividualCustomerRequest.getLastName());
-		 customer.setTcKimlikNo(createIndividualCustomerRequest.getTcKimlikNo());
-		 customer.setBirthDate(createIndividualCustomerRequest.getCustomerBirthDate());
-		 System.out.println(responseObject.get("birthPlace").toString());
-		 customer.setBirthPlace(createIndividualCustomerRequest.getCustomerBirthPlace());
-		 this.customerRepository.save(customer);
-		 individualCustomer.setCustomer(customer);	
 		 individualCustomer.setPhoneNumber(createIndividualCustomerRequest.getPhoneNumber());
-		 individualCustomer.setIndividualCustomerNumber(0000000001);
+		
+		 
+		 individualCustomer.setIndividualCustomerNumber(helperFunctions.createIndividualCustomerNumber());
 		 //boş liste set etmeme gerek var mı bilmiyorum ben hepsini elle set ettim mapper belki null yapmıştır listeleri
 		 //sanırım customer nesnesi de oluşturmak gerekiyormuş
 		 this.individualCustomerRepository.save(individualCustomer);
 		 
 		 }
 		
-	}
+	
 
 	@Override
 	public List<GetAllIndividualCustomersResponse> getAll() {

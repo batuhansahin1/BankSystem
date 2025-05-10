@@ -29,7 +29,22 @@ public class HelperFunctions {
 		}
 		return accountNumber;
 	}
-	
+	public String createIndividualCustomerNumber() {
+		String customerNumber="";
+		for(int i=0;i<12;i++) {
+			customerNumber+=Math.round(Math.random()*9);
+		}
+		
+		return customerNumber;
+	}
+	public String createCorporateCustomerNumber() {
+		String customerNumber="";
+		for(int i=0;i<13;i++) {
+			customerNumber+=Math.round(Math.random()*9);
+		}
+		
+		return customerNumber;
+	}
 	//gneric olarak post ve get request oluşturacağız
 	public String urlBuilder(String url,String parameter) {
 		String url1 = UriComponentsBuilder.fromHttpUrl(url)

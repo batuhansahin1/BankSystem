@@ -22,7 +22,7 @@ public class IndividualAccountsController {
 	private final IndividualAccountService individualAccountService;
 	
 	@GetMapping("/getAll")
-	List<GetAllIndividualAccountsResponse> getAll(String accountNumber){
+	List<GetAllIndividualAccountsResponse> getAll(){
 		return individualAccountService.getAll();
 	}
 	@PostMapping("/add")

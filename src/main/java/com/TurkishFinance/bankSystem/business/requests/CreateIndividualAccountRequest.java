@@ -1,7 +1,6 @@
 package com.TurkishFinance.bankSystem.business.requests;
 
-import java.time.LocalDate;
-
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateIndividualAccountRequest {
 
-	private String tcKimlikNo;
-	private String firstName;
-	private String lastName;
-	private LocalDate birthdate;
-	private String birthPlace;
+	@Size(min = 12,max = 12)
+	private String individualCustomerNumber;
+	
+	@Size(min = 2,max = 3)
+	private String accountCurrency;
 }
