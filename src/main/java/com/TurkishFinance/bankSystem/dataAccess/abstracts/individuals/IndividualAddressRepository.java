@@ -8,4 +8,7 @@ import com.TurkishFinance.bankSystem.entities.individuals.IndividualAddress;
 @Service
 public interface IndividualAddressRepository extends JpaRepository<IndividualAddress, Integer> {
 
+	IndividualAddress findByIndividualAddressNumber(String individualAddressNumber);
+	boolean existsByIndividualAddressNumber(String individualAddressNumber);
+
 }

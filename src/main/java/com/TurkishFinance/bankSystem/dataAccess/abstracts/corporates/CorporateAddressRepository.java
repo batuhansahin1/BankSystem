@@ -8,4 +8,7 @@ import com.TurkishFinance.bankSystem.entities.corporates.CorporateAddress;
 @Repository
 public interface CorporateAddressRepository extends JpaRepository<CorporateAddress, Integer> {
 
+	CorporateAddress findByCorporateAddressNumber(String corporateAddressNumber);
+	boolean existsByCorporateAddressNumber(String corporateAddressNumber);
+
 }

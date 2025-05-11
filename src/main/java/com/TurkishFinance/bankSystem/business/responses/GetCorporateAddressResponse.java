@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class GetAddressResponse {
+public class GetCorporateAddressResponse {
 
 	private String corporateAddressNumber;
 	private String addressCity;
