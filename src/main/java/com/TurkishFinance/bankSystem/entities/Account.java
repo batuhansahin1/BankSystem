@@ -2,6 +2,7 @@ package com.TurkishFinance.bankSystem.entities;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 import com.TurkishFinance.bankSystem.entities.corporates.CorporateAccount;
 import com.TurkishFinance.bankSystem.entities.corporates.CorporateCustomer;
@@ -13,6 +14,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -63,6 +65,9 @@ public class Account {
 	
 	@OneToOne(mappedBy = "account",cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private CorporateAccount corporateAccount;
+	
+	@OneToMany(mappedBy = "account")
+	List<AccountTransaction> accountTransactions;
 	
 	//customerların bağlı olduğu ana class için tc ile çekip merkez bankasında yollicaz 
 	//o da doğru mu diye kontrol edicek

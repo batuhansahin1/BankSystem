@@ -14,5 +14,5 @@ public class GetAllIndividualAccountsResponse {
 	private String accountIbanNumber;
 	private long accountTotalAmount;
 	private String individualCustomerIndividualCustomerNumber;
-	
+	private String accountNumber;
 }

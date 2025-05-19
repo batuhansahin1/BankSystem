@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.TurkishFinance.bankSystem.core.utilities.exceptions.BusinessException;
 import com.TurkishFinance.bankSystem.entities.corporates.CorporateCustomer;
 import com.TurkishFinance.bankSystem.entities.individuals.IndividualCustomer;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,13 +68,19 @@ public class HelperFunctions {
 	return response;
 	}
 	public Map<String,Object> postAccount(String url) throws JsonProcessingException {
-		
+		//server aktif değilse ya da istek atarken bi hatayla karşılaşırsak yakalamak için
+		try {
+			
 		//ObjectMapper mapper=new ObjectMapper();
 		//String json=mapper.writeValueAsString(requestObject);
 		Map<String,Object> response=webClient.post().uri(url).retrieve().bodyToMono(new ParameterizedTypeReference<Map<String,Object>>() {
 		}).block();
 		
 		return response;
+		}catch(Exception e) {
+			 throw e;
+		}
+		
 	}
 	
 	//boşuna upraşıyorum post request'i sadece tKimlikNo ile yapıcaz ve gelen response'yi döndürücez yok create requestte istenilen her şeyi göndermemiz lazım
@@ -86,6 +93,7 @@ public class HelperFunctions {
 		map.put("tcKimlikNo",customer.getCustomer().getTcKimlikNo());
 		map.put("birthDate", customer.getCustomer().getBirthDate());
 		String json=mapper.writeValueAsString(map);
+		//buna izin vermedi urlde sorgulama yapıyoruz garip bir şekilde
 		Map<String,Object>response=webClient.post().uri(url).bodyValue(json).retrieve().bodyToMono(new ParameterizedTypeReference<Map<String,Object>>() {}).block();
 	//response başarılı mı döndü null mu ona görehata yönetimi var
 	

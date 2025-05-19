@@ -8,4 +8,8 @@ import com.TurkishFinance.bankSystem.entities.AccountTransaction;
 @Repository
 public interface AccountTransactionRepository extends JpaRepository<AccountTransaction, Integer>{
 
+	AccountTransaction getByTransactionNumber(String transactionNumber);
+	boolean existsByTransactionNumber(String transactionNumber);
+	boolean existsByTransactionReferance(String transactionReferance);
+
 }
