@@ -25,4 +25,11 @@ public class AccountBusinessRules {
 			throw new BusinessException("this account is passive you can not send money to this account");
 		}
 	}
+	public void checkIfIbanExists(String ibanNumber) {
+		
+		if(!this.accountRepository.existsByIbanNumber(ibanNumber)) {
+			throw new BusinessException("There is no iban in this bank");
+		}
+		
+	}
 }

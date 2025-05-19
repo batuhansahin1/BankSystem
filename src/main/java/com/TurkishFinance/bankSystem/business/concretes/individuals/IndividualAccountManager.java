@@ -14,6 +14,7 @@ import com.TurkishFinance.bankSystem.business.responses.GetAllIndividualAccounts
 import com.TurkishFinance.bankSystem.business.responses.GetIndividualAccountResponse;
 import com.TurkishFinance.bankSystem.business.rules.individuals.IndividualAccountBusinessRules;
 import com.TurkishFinance.bankSystem.business.rules.individuals.IndividualCustomerBusinessRules;
+import com.TurkishFinance.bankSystem.core.utilities.exceptions.BusinessException;
 import com.TurkishFinance.bankSystem.core.utilities.helper.HelperFunctions;
 import com.TurkishFinance.bankSystem.core.utilities.mappers.abstracts.ModelMapperService;
 import com.TurkishFinance.bankSystem.dataAccess.abstracts.AccountRepository;
@@ -44,9 +45,11 @@ public class IndividualAccountManager implements IndividualAccountService {
 	
 		List<IndividualAccount> individualAccounts=this.individualAccountRepository.findAll();
 		List<GetAllIndividualAccountsResponse> accountsResponse=individualAccounts.stream()
-				.map(account->this.modelMapperService.forResponse().map(account, GetAllIndividualAccountsResponse.class))
-				.collect(Collectors.toList());
-		
+				.map(account->{
+					GetAllIndividualAccountsResponse getAllResponse=this.modelMapperService.forResponse().map(account, GetAllIndividualAccountsResponse.class);
+						getAllResponse.setAccountNumber(account.getAccount().getAccountNumber());
+						return getAllResponse;
+				}).collect(Collectors.toList());
 		return accountsResponse;
 	}
 
@@ -84,8 +87,8 @@ public class IndividualAccountManager implements IndividualAccountService {
 		
 	    try {
 			Map<String,Object> responseObject =helperFunctions.postAccount(uri);
-			
-			if(responseObject.equals(null)) {
+			System.out.println(responseObject);
+			if(responseObject==null) {
 				throw new Exception("response object is null");
 			}
 		    Account account=new Account();
@@ -102,8 +105,9 @@ public class IndividualAccountManager implements IndividualAccountService {
 			individualAccountRepository.save(individualAccount);
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 System.err.println("İstek sırasında hata oluştu: " + e.getMessage());
+			 throw new BusinessException(e.getMessage());
+			//e.printStackTrace();
 		}
 	}
    
