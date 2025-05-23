@@ -98,8 +98,40 @@ public class AccountTransactionManager implements AccountTransactionService{
 			Map<String,Object>responseObject=helperFunctions.postAccount(uri);
 			AccountTransaction accountTransaction=this.modelMapperService.forRequest()
 					.map(createTransactionRequest, AccountTransaction.class);
+			//Merkez bankasından afterCreatingTransferResponse'da transactionReferance'yi 1234567890
+			//döndürüyorum ama merkez bankası alıcı bankaya api request yaparken referansı 1234567862 olarak
+			//yapmış ve responseda gönderenin adı kaydedilmiyor onu banka içinden set etmemiz lazım
+			//buradan çünkü central bank'ın gönderdiği requestlerde hepsi set ediliyor
+			// mb'ndan responseda  receiver'ı dönmüyoruz o yüzden oluyor receiver'ın bilgileri bizde var zaten
+			//bu class için söylüyorum çünkü transferi biz başlatıyoruz
+			//boş olan kısım buranın senderFirstName ve senderLastName alanları
+			//onu set etmedim çünkü accounttan alınır diye düşündüm
+			//22.05.2025 bakılsın
+			this.accountTransactionBusinessRules.checkIfTransactionReferanceExists(responseObject
+					.get("transferReferance").toString());
 			System.out.println(responseObject);
 			accountTransaction.setAccount(account); 
+		
+			
+			
+			//burada takılmıştım hesap'ı buluyorum ama account'un individual mı değil mi onu bulamıyorum
+			//bunun yerine ibanla individual ya da corporate içinde gezip türünü belirleyip setAccount'a
+			//onların içindeki ilişkili oldukları accıunt'u vericem
+			// bu yüzden genel bulmama gerek yok çünkü account içinde individual
+			//corporate diye ayrılıyor  hangisi olduğunu bilmek için ikisinin de içinde
+			//arama yapmam lazım responseda da senderName olarak alabilirim bunları yapmak yerine 
+			//mb bana dekontla ilgili tüm verileri gönderir
+			//22.05.2025 yapılacaklar
+			//direkt merkez bankasından döndüreceğim ama account'u bulmak için yine ikisinde de
+			//aramam lazım
+			//corporate customer olursa bu kullanılmaz burası optional 
+			//direkt account ile customer bilgisini bağlasak nasıl olur
+			//ama yaratırken ndividualCustomerdan yaratamayız
+			//gpt ile hasbihal lazım
+			accountTransaction.setSenderFirstName(account.getIndividualAccount().getIndividualCustomer()
+					.getCustomer().getFirstName());
+			accountTransaction.setSenderLastName(account.getIndividualAccount()
+					.getIndividualCustomer().getCustomer().getLastName());
 			accountTransaction.setTransferAmount(createTransactionRequest.getTransferAmount());
 			account.setTotalAmount(account.getTotalAmount()+(long)createTransactionRequest.getTransferAmount());
 			accountTransaction.setCurrency(account.getAccountCurrency());
