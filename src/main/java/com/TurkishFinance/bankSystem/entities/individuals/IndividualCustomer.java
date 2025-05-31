@@ -1,5 +1,6 @@
 package com.TurkishFinance.bankSystem.entities.individuals;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.TurkishFinance.bankSystem.entities.Customer;
@@ -23,28 +24,44 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class IndividualCustomer  {
+public class IndividualCustomer extends Customer {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private int id;
 	
-	@Column(name = "individual_customer_number",unique = true)
-	@Size(min = 12,max = 12)
-	private String individualCustomerNumber;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name="last_name")
+    private String lastName;
+    
+    @Column(name = "birth_place")
+    private String birthPlace;
+	
+	@Column(name="birth_date")
+	private LocalDate birthDate;
+	
+	@Column(name = "tc_kimlik_no",unique = true,length = 11)
+	private String tcKimlikNo;
+	
+//	@Column(name = "individual_customer_number",unique = true)
+//	@Size(min = 12,max = 12)
+//	private String individualCustomerNumber;
 	
 	@Column(name = "phone_number")
 	@Size(min =12 ,max=14)
 	private String phoneNumber;
-	@OneToOne
-	@JoinColumn(referencedColumnName = "tc_kimlik_no")
-	private Customer customer;
 	
-	@OneToMany(mappedBy = "individualCustomer")
-	private List<IndividualAddress> individualAddressList;
 	
-	@OneToMany(mappedBy = "individualCustomer")
-	private List<IndividualAccount> individualAccounts;
+	/*
+	 * @OneToOne
+	 * 
+	 * @JoinColumn(referencedColumnName = "tc_kimlik_no") private Customer customer;
+	 */
+	
+	//ikisini de ana tabloya referans vericem
+
+	
 	
 	//adresste olması lazım güzelim adre tablosuna eklicez daha sonra oradan type'a göre çekeriz zaten response
 	//gelince elle set ederiz

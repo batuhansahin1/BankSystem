@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.TurkishFinance.bankSystem.core.utilities.exceptions.BusinessException;
-import com.TurkishFinance.bankSystem.entities.corporates.CorporateCustomer;
 import com.TurkishFinance.bankSystem.entities.individuals.IndividualCustomer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,9 +28,9 @@ public class HelperFunctions {
 		}
 		return accountNumber;
 	}
-	public String createIndividualCustomerNumber() {
+	public String createCustomerNumber() {
 		String customerNumber="";
-		for(int i=0;i<12;i++) {
+		for(int i=0;i<11;i++) {
 			customerNumber+=Math.round(Math.random()*9);
 		}
 		
@@ -84,28 +82,29 @@ public class HelperFunctions {
 	}
 	
 	//boşuna upraşıyorum post request'i sadece tKimlikNo ile yapıcaz ve gelen response'yi döndürücez yok create requestte istenilen her şeyi göndermemiz lazım
-	public void post(String url,CorporateCustomer customer) throws JsonProcessingException {
-		ObjectMapper mapper=new ObjectMapper();
-		Map<String, Object> map=new HashMap<>();
-		//bu alttaki genelde kullanılan alttakileri genelleştiricem bu postu individual'ın kullanabilmesi için de yazıcam 
-		map.put("firstName",customer.getCustomer().getFirstName());
-		map.put("lastName",customer.getCustomer().getLastName());
-		map.put("tcKimlikNo",customer.getCustomer().getTcKimlikNo());
-		map.put("birthDate", customer.getCustomer().getBirthDate());
-		String json=mapper.writeValueAsString(map);
-		//buna izin vermedi urlde sorgulama yapıyoruz garip bir şekilde
-		Map<String,Object>response=webClient.post().uri(url).bodyValue(json).retrieve().bodyToMono(new ParameterizedTypeReference<Map<String,Object>>() {}).block();
-	//response başarılı mı döndü null mu ona görehata yönetimi var
-	
-	}
+	//kullanılmıyor
+//	public void post(String url,CorporateCustomer customer) throws JsonProcessingException {
+//		ObjectMapper mapper=new ObjectMapper();
+//		Map<String, Object> map=new HashMap<>();
+//		//bu alttaki genelde kullanılan alttakileri genelleştiricem bu postu individual'ın kullanabilmesi için de yazıcam 
+//		map.put("firstName",customer.getFirstName());
+//		map.put("lastName",customer.getLastName());
+//		map.put("tcKimlikNo",customer.getTcKimlikNo());
+//		map.put("birthDate", customer.getBirthDate());
+//		String json=mapper.writeValueAsString(map);
+//		//buna izin vermedi urlde sorgulama yapıyoruz garip bir şekilde
+//		Map<String,Object>response=webClient.post().uri(url).bodyValue(json).retrieve().bodyToMono(new ParameterizedTypeReference<Map<String,Object>>() {}).block();
+//	//response başarılı mı döndü null mu ona görehata yönetimi var
+//	
+//	}
 	public void postIndividual(String url,IndividualCustomer customer) throws JsonProcessingException {
 		ObjectMapper mapper=new ObjectMapper();
 		Map<String, Object> map=new HashMap<>();
 		//bu alttaki genelde kullanılan alttakileri genelleştiricem bu postu individual'ın kullanabilmesi için de yazıcam 
-		map.put("firstName",customer.getCustomer().getFirstName());
-		map.put("lastName",customer.getCustomer().getLastName());
-		map.put("tcKimlikNo",customer.getCustomer().getTcKimlikNo());
-		map.put("birthDate", customer.getCustomer().getBirthDate());
+		map.put("firstName",customer.getFirstName());
+		map.put("lastName",customer.getLastName());
+		map.put("tcKimlikNo",customer.getTcKimlikNo());
+		map.put("birthDate", customer.getBirthDate());
 		String json=mapper.writeValueAsString(map);
 		Map<String,Object>response=webClient.post().uri(url).bodyValue(json).retrieve().bodyToMono(new ParameterizedTypeReference<Map<String,Object>>() {}).block();
 	//response başarılı mı döndü null mu ona görehata yönetimi var

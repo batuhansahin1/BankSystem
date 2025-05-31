@@ -1,19 +1,20 @@
 package com.TurkishFinance.bankSystem.entities;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
-import com.TurkishFinance.bankSystem.entities.corporates.CorporateAccount;
-import com.TurkishFinance.bankSystem.entities.corporates.CorporateCustomer;
-import com.TurkishFinance.bankSystem.entities.individuals.IndividualAccount;
-import com.TurkishFinance.bankSystem.entities.individuals.IndividualCustomer;
+
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -27,11 +28,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 //bu classın hepsini biz oluşturacağımız için ilişkilendirilen customer'ın numarasını alsak yeterli
 public class Account {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@Column(name = "account_number",unique = true)
@@ -60,14 +62,19 @@ public class Account {
 	@Size(min = 2,max = 3)
 	private String accountCurrency;
 	
-	@OneToOne(mappedBy = "account",cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private IndividualAccount individualAccount;
-	
-	@OneToOne(mappedBy = "account",cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private CorporateAccount corporateAccount;
+	@JoinColumn(name = "customer_id")
+	@ManyToOne
+	private Customer customer;
 	
 	@OneToMany(mappedBy = "account")
 	List<AccountTransaction> accountTransactions;
+	/*
+	 * @OneToOne(mappedBy = "account",cascade = CascadeType.REMOVE, orphanRemoval =
+	 * true) private IndividualAccount individualAccount;
+	 * 
+	 * @OneToOne(mappedBy = "account",cascade = CascadeType.REMOVE, orphanRemoval =
+	 * true) private CorporateAccount corporateAccount;
+	 */
 	
 	//customerların bağlı olduğu ana class için tc ile çekip merkez bankasında yollicaz 
 	//o da doğru mu diye kontrol edicek

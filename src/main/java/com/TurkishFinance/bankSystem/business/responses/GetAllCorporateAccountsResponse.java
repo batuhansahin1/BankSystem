@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetAllCorporateAccountsResponse {
 
+	private int id;
 	 private String accountAccountNumber;
-	 private String accountIbanNumber;
+	 private String ibanNumber;
 	 private String accountAccountCurrency;
 	 private String accountVergiKimlikNo;
 	 private String corporateCorporateName;

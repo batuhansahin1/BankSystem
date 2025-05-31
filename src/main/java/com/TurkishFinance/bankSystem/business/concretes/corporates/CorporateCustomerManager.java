@@ -42,7 +42,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 			
 			this.corporateCustomerBusinessRules.checkIfCorporateCustomerNumberExists(corporateCustomerNumber);
 
-		CorporateCustomer corporateCustomer=this.corporateCustomerReqpository.findByCorporateCustomerNumber(corporateCustomerNumber);
+		CorporateCustomer corporateCustomer=this.corporateCustomerReqpository.findByCustomerNumber(corporateCustomerNumber);
         GetCorporateCustomerResponse customerResponse=this.modelMapperService.forResponse()
         		.map(corporateCustomer, GetCorporateCustomerResponse.class);
                   
@@ -52,18 +52,24 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	@Override
 	public void addCorporateCustomer(CreateCorporateCustomerRequest createCorporateCustomerRequest) throws Exception {
 	  //bu tcye ait bir corporatecustomer varsa yeniden oluşturamamyız
-	   this.corporateCustomerBusinessRules.checkIfTcKimlikNoExists(createCorporateCustomerRequest.getTcKimlikNo());
+	    //  corporate customerlarda tcKimlik no almıyoruz şimdilik o yok
+		//this.corporateCustomerBusinessRules.checkIfTcKimlikNoExists(createCorporateCustomerRequest.getTcKimlikNo());
 	   
+	   this.corporateCustomerBusinessRules.checkIfVergiKimlikNoExists(createCorporateCustomerRequest.getVergiKimlikNo());
 	   //customer'da kişi bilgileri var ama corporatede yoksa yani müşteri individual daha sonra 
 	   //corporate hesap açıyorsa onu customer tablosundaki veriyle ilişkilendirmemiz lazım yoksa aynı veriyi bir daha 
 	   //customer tablosuna eklemiş oluruz
-	   Optional<Customer> optionalCustomer=this.customerRepository
-			   .findByTcKimlikNo(createCorporateCustomerRequest.getTcKimlikNo());
+	   //saçma değil mi zaten customer tablosunda olan bir firmayı ben niye ekliyorum
+	   //bu individual'ı bulmak için öamtıklı olabilir ama customer tablosunda artık tcKimlikNo alanı yok
+	   //buna gerek yok  çünkü atanmamış müşteri bilgisi olamaz
+	  // Optional<Customer> optionalCustomer=this.customerRepository
+			 //  .findByTcKimlikNo(createCorporateCustomerRequest.getTcKimlikNo());
 	   
 
 	   //burada nüfustan veri doğrulayacağız
        //veritabanımızda böyle bir kayıt varsa http request'e gerek yok
 	   //güncel veriyi almak için request atıyoruz
+	   //şimdilik buna da gerek yok kişiye ait bir hesap olmayacak
 	   String url=UriComponentsBuilder.fromHttpUrl("http://localhost:9091/api/person/getPerson")
 			   .queryParam("tcKimlikNo", createCorporateCustomerRequest.getTcKimlikNo()).toUriString();
 	   
@@ -78,26 +84,42 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		}
 		
 		CorporateCustomer corporateCustomer=this.modelMapperService.forRequest().map(createCorporateCustomerRequest, CorporateCustomer.class);
-		   if(optionalCustomer.isPresent()) {
-			corporateCustomer.setCustomer(optionalCustomer.get());   
-		   }	
-		
-		   else {
-			   
-			   Customer customer=new Customer();
-			   customer.setFirstName(createCorporateCustomerRequest.getFirstName());
-			   customer.setLastName(createCorporateCustomerRequest.getLastName());
-			   customer.setBirthDate(createCorporateCustomerRequest.getBirthDate());
-			   customer.setBirthPlace(createCorporateCustomerRequest.getBirthPlace());
-			   customer.setTcKimlikNo(createCorporateCustomerRequest.getTcKimlikNo());
-			   corporateCustomer.setCustomer(customer);
-			   this.customerRepository.save(customer);
-		   }
+		   
+		//ilişki yok corporate'da bir customer ayrı tablo değil
+//		if(optionalCustomer.isPresent()) {
+//			//corporateCustomer.(optionalCustomer.get());   
+//		   }	
+//		
+		///bu if elselerde mantık yoksa oluştur ve ilişkilendir varsa bul ve ilişkilendir
+		///bunu düşüneceğim individualdan corporate hesaba ilişki vermek zorunda mıyım ama ilişki verirsem
+		///bu her corporate customer bir bireysel müşteriye aittir demek eğer bu bilgileri customer'a çıkarırsam
+		///o zaman da sahibi olmayan kurum  olduğunda kamu kurumları bu sefer de customerdaki alanlar boş kalacak
+		///yani customer tablosunda null alanlar olucak
+//		   else {
+//			   //direkt customer bilgilerini belirleyip onu tanımlarken türüyle tanımlayıp önce customer sonra 
+//			   //corporate ile ilgili verileri setleyip ilk customer'a save edicez daha sonra da bunu corporate
+//			   //customer'a set edicez
+//			   
+//			   //ortak alanlarda kişisel bilgiler yok maalesef kişisel bilgilerle set edip oluşturamıcaz 
+//			   //bir üşteri ya corporate'dir ya da individualdır
+////			   Customer customer=new Customer();
+////			   customer.setFirstName(createCorporateCustomerRequest.getFirstName());
+////			   customer.setLastName(createCorporateCustomerRequest.getLastName());
+////			   customer.setBirthDate(createCorporateCustomerRequest.getBirthDate());
+////			   customer.setBirthPlace(createCorporateCustomerRequest.getBirthPlace());
+////			   customer.setTcKimlikNo(createCorporateCustomerRequest.getTcKimlikNo());
+////			   corporateCustomer.setCustomer(customer);
+////			   this.customerRepository.save(customer);
+//		   }
+		  
+		    corporateCustomer.setCustomerNumber(helperFunctions.createCustomerNumber());
 			corporateCustomer.setCompanyType(createCorporateCustomerRequest.getCompanyType());
-			corporateCustomer.setCorporateCustomerNumber(helperFunctions.createCorporateCustomerNumber());
+			//customerNumber ortak field
+			//corporateCustomer.setCorporateCustomerNumber(helperFunctions.createCorporateCustomerNumber());
 			corporateCustomer.setCorporateName(createCorporateCustomerRequest.getCorporateName());
 			corporateCustomer.setCorporatePhone(createCorporateCustomerRequest.getCorporatePhone());
 			corporateCustomer.setVergiKimlikNo(createCorporateCustomerRequest.getVergiKimlikNo());
+		    this.customerRepository.save(corporateCustomer);
 			this.corporateCustomerReqpository.save(corporateCustomer);
 	}
 

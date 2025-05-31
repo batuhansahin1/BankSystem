@@ -11,36 +11,40 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.TurkishFinance.bankSystem.business.abstracts.corporates.CorporateAccountService;
+
+import com.TurkishFinance.bankSystem.business.abstracts.corporates.DrawingAccountService;
 import com.TurkishFinance.bankSystem.business.requests.CreateCorporateAccountRequest;
 import com.TurkishFinance.bankSystem.business.requests.UpdateCorporateAccountRequest;
 import com.TurkishFinance.bankSystem.business.responses.GetAllCorporateAccountsResponse;
 import com.TurkishFinance.bankSystem.business.responses.GetCorporateAccountResponse;
 import com.TurkishFinance.bankSystem.business.rules.AccountBusinessRules;
 import com.TurkishFinance.bankSystem.business.rules.CustomerBusinessRules;
-import com.TurkishFinance.bankSystem.business.rules.corporates.CorporateAccountBusinessRules;
+
 import com.TurkishFinance.bankSystem.business.rules.corporates.CorporateCustomerBusinessRules;
+import com.TurkishFinance.bankSystem.business.rules.corporates.DrawingAccountBusinessRules;
 import com.TurkishFinance.bankSystem.core.utilities.exceptions.BusinessException;
 import com.TurkishFinance.bankSystem.core.utilities.helper.HelperFunctions;
 import com.TurkishFinance.bankSystem.core.utilities.mappers.abstracts.ModelMapperService;
 import com.TurkishFinance.bankSystem.dataAccess.abstracts.AccountRepository;
-import com.TurkishFinance.bankSystem.dataAccess.abstracts.corporates.CorporateAccountRepository;
+
 import com.TurkishFinance.bankSystem.dataAccess.abstracts.corporates.CorporateCustomerRepository;
+import com.TurkishFinance.bankSystem.dataAccess.abstracts.corporates.DrawingAccountRepository;
 import com.TurkishFinance.bankSystem.entities.Account;
-import com.TurkishFinance.bankSystem.entities.corporates.CorporateAccount;
+
 import com.TurkishFinance.bankSystem.entities.corporates.CorporateCustomer;
+import com.TurkishFinance.bankSystem.entities.corporates.DrawingAccount;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CorporateAccountManager implements CorporateAccountService {
+public class DrawingAccountManager implements DrawingAccountService {
 
-	private final CorporateAccountRepository corporateAccountRepository;
+	private final DrawingAccountRepository drawingAccountRepository;
 	private final ModelMapperService modelMapperService;
 	private final AccountRepository accountRepository;
-	private final CorporateAccountBusinessRules corporateAccountBusinessRules;
+	private final DrawingAccountBusinessRules drawingAccountBusinessRules;
 	private final AccountBusinessRules accountBusinessRules;
 	private final CorporateCustomerRepository corporateCustomerRepository;
 	private final HelperFunctions helperFunctions;
@@ -52,9 +56,9 @@ public class CorporateAccountManager implements CorporateAccountService {
 	public GetCorporateAccountResponse getCorporateAccount(String accountNumber) {
 		
 	   this.accountBusinessRules.checkIfAccountNumberExists(accountNumber);
-	   CorporateAccount corporateAccount=this.corporateAccountRepository.findByAccountAccountNumber(accountNumber);
-	   GetCorporateAccountResponse getCorporateAccountResponse=this.modelMapperService.forResponse().map(corporateAccount, GetCorporateAccountResponse.class);
-	   getCorporateAccountResponse.setAccountNumber(corporateAccount.getAccount().getAccountNumber());
+	   DrawingAccount drawingAccount=this.drawingAccountRepository.findByAccountNumber(accountNumber);
+	   GetCorporateAccountResponse getCorporateAccountResponse=this.modelMapperService.forResponse().map(drawingAccount, GetCorporateAccountResponse.class);
+	   getCorporateAccountResponse.setAccountNumber(drawingAccount.getAccountNumber());
 		
 		return getCorporateAccountResponse;
 	}
@@ -63,7 +67,7 @@ public class CorporateAccountManager implements CorporateAccountService {
 	public List<GetAllCorporateAccountsResponse> getAll() {
 		
 		//GetAllCorporateAccountsResponse getAllCorporateAccountsResponse=new GetAllCorporateAccountsResponse();
-		List<CorporateAccount> corporateAccounts=corporateAccountRepository.findAll();
+		List<DrawingAccount> corporateAccounts=drawingAccountRepository.findAll();
 		List<GetAllCorporateAccountsResponse> corporateAccountList=corporateAccounts.stream()
 				.map(account->this.modelMapperService.forResponse()
 						.map(account, GetAllCorporateAccountsResponse.class))
@@ -84,7 +88,7 @@ public class CorporateAccountManager implements CorporateAccountService {
 		//bütün tablolarda örnek oluşturucaz
 		//yine corporate diye ayırmak zorunda kalabiliriz merkez bankası için söylüyrum bunu
 		//corporateCustomerBusinessRules.checkIfCorporateCustomerNumberExists(createCorporateAccountRequest.getCorporateCustomerNumber());
-		CorporateCustomer corporateCustomer=this.corporateCustomerRepository.findByCorporateCustomerNumber(createCorporateAccountRequest.getCorporateCustomerNumber());
+		CorporateCustomer corporateCustomer=this.corporateCustomerRepository.findByCustomerNumber(createCorporateAccountRequest.getCorporateCustomerNumber());
 		//bu customer'a ait bilgilerle request yapıcaz
 		//accountNo'yu da biz oluşturucaz 00000000000000001
   
@@ -92,9 +96,15 @@ public class CorporateAccountManager implements CorporateAccountService {
         //bu post fonksiyonunu genelleştireceğim
          String accountNumber=helperFunctions.createAccountNumber();
          System.out.println(accountNumber);
+         //corporate customer için tc tutmuyorum daha doğrusu customer içinde tc tutmuyorum bireysel bilgiler
+         //individual customerda bunun yerine firmanın vergi kimlik nosunu isteyelim
+         // fast uygulaması personaccountta bunu değiştiricem
+         //çözülmesi gereken bir sorun daha  fast'te bütün personAccount ekleme şekilleri ortak
+         // ve bu da tKimlikNo ile gerçekleştiriliyor ama corporate'De vkn istiyorum
 		String uri= UriComponentsBuilder.fromHttpUrl("http://localhost:9090/api/personaccounts/add")
-        		.queryParam("personTcKimlikNo",corporateCustomer.getCustomer().getTcKimlikNo())
-        		.queryParam("bankName", "ziraat").queryParam("vergiKimlikNo","1111111111")
+        		//.queryParam("personTcKimlikNo",corporateCustomer.getTcKimlikNo())
+				.queryParam("companyVkn", corporateCustomer.getVergiKimlikNo())        		
+				.queryParam("bankName", "ziraat").queryParam("vergiKimlikNo","1111111111")
         		.queryParam("bankCode", "00001").queryParam("accountNo",accountNumber)
         		.queryParam("accountCurrency",createCorporateAccountRequest.getAccountCurrency()).toUriString();
 		System.out.println(uri);
@@ -103,25 +113,25 @@ public class CorporateAccountManager implements CorporateAccountService {
 	if(fastSystemResponse.get("errorCode")!=null&&fastSystemResponse.get("errorMessage").toString()!=null) {
 		throw new BusinessException(fastSystemResponse.get("errorMessage").toString());
 	}
-     
+     //tamamein değişmesi lazım artık customer tipine göre değişiecek yani corporate da drawing de eklenecek
      /*
 		 * ObjectMapper mapper=new ObjectMapper(); String
 		 * jsonString=mapper.writeValueAsString(requestObj);
 		 */
 	  //account'u save yapıcam unutmuşum
+	    DrawingAccount drawingAccount=new DrawingAccount();
         Account account=new Account();
-        account.setAccountCurrency(createCorporateAccountRequest.getAccountCurrency());
-        account.setAccountNumber(accountNumber); 
+        drawingAccount.setAccountCurrency(createCorporateAccountRequest.getAccountCurrency());
+        drawingAccount.setAccountNumber(accountNumber); 
 	   //responseda gelicek
-        account.setIbanNumber(fastSystemResponse.get("ibanNumber").toString());
-        account.setOpenedDate(LocalDate.now());
-        account.setTotalAmount(0);
-        account.setStatus("active");       
-        accountRepository.save(account);
-        CorporateAccount corporateAccount=new CorporateAccount();
-        corporateAccount.setAccount(account);
-        corporateAccount.setCorporateCustomer(corporateCustomer);
-        corporateAccountRepository.save(corporateAccount);
+        drawingAccount.setIbanNumber(fastSystemResponse.get("ibanNumber").toString());
+        drawingAccount.setOpenedDate(LocalDate.now());
+        drawingAccount.setTotalAmount(0);
+        drawingAccount.setStatus("active");       
+        accountRepository.save(drawingAccount);
+        //corporateAccount.setAccount(account);
+        drawingAccount.setCustomer(corporateCustomer);
+        drawingAccountRepository.save(drawingAccount);
         
 	}
 
@@ -130,7 +140,7 @@ public class CorporateAccountManager implements CorporateAccountService {
 		// TODO Auto-generated method stub
 		//10.05.2025'de yazıcam
 		//jpa sorguları kötü delete by ile doğru düzgün  
-		this.corporateAccountBusinessRules.checkIfAccountNumberExists(accountNumber);
+		this.drawingAccountBusinessRules.checkIfAccountNumberExists(accountNumber);
 		//CorporateAccount corporateAccount= corporateAccountRepository.findByAccountAccountNumber(accountNumber);
 		//üst türden sildim cascade olduğu için iki tablodan da sildi ama bunun individual mı corporate mı old
 		//nasıl anlayacağız yukarıdaki gibi bir businessrules yazarak anlayabiliriz

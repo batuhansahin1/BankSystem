@@ -38,9 +38,9 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	@Override
 	public GetIndividualCustomerResponse getIndividualCustomer(String individualCustomerNumber) {
 		//businessruless
-		this.individualCustomerBusinessRules.checkIfExistsByCustomerNumber(individualCustomerNumber);
+		this.individualCustomerBusinessRules.checkIfCustomerNumberExists(individualCustomerNumber);
 		
-		IndividualCustomer individualCustomer =this.individualCustomerRepository.findByIndividualCustomerNumber(individualCustomerNumber);
+		IndividualCustomer individualCustomer =this.individualCustomerRepository.findByCustomerNumber(individualCustomerNumber);
 		GetIndividualCustomerResponse individualCustomerResponse= this.modelMapperService.forResponse().map(individualCustomer, GetIndividualCustomerResponse.class);
 		return individualCustomerResponse;
 	} 
@@ -53,8 +53,12 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		this.individualCustomerBusinessRules.checkIfTcKimlikNoExists(createIndividualCustomerRequest.getTcKimlikNo());
 		
 		 IndividualCustomer individualCustomer=new IndividualCustomer();
-		Optional<Customer> optionalCustomer=this.customerRepository
-				.findByTcKimlikNo(createIndividualCustomerRequest.getTcKimlikNo());
+		 //veritabanında customer tablosunda bu tcye ait biri varsa onu direkt individualcustomer ile ilişkilen-
+		 //diriyoruz ama artık ikisi de customer'ın bir türü olduğu için ilişkilendirmeye gerek yok
+		 //çünkü bir müşteri ya individual ya da corporate olabiliyor
+	     //atanmamaış boşta bir customer olamaz ya individual ya da corporate olacak
+		 //Optional<Customer> optionalCustomer=this.customerRepository
+			//	.findByTcKimlikNo(createIndividualCustomerRequest.getTcKimlikNo());
 	
 		//customerda varsa onu save etmeyelim
 		//nüfusa request atılacak veri doğrulanıp devam edilecek
@@ -80,27 +84,29 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 			 
 		 }
 		 
-			if(optionalCustomer.isPresent()) {
-				//olan bir customer'ı set etmemek için bunu yapmam lazım
-				individualCustomer.setCustomer(optionalCustomer.get());
-			}
-			else {
-				 Customer customer=new Customer();
-			 customer.setFirstName(createIndividualCustomerRequest.getFirstName());
-			 customer.setLastName(createIndividualCustomerRequest.getLastName());
-			 customer.setTcKimlikNo(createIndividualCustomerRequest.getTcKimlikNo());
-			 customer.setBirthDate(createIndividualCustomerRequest.getCustomerBirthDate());
-			 System.out.println(responseObject.get("birthPlace").toString());
-			 customer.setBirthPlace(createIndividualCustomerRequest.getCustomerBirthPlace());
-			 this.customerRepository.save(customer);
-			 individualCustomer.setCustomer(customer);
-			}
-		
+//			if(optionalCustomer.isPresent()) {
+//				//olan bir customer'ı set etmemek için bunu yapmam lazım
+//				
+//				//individualCustomer.setCustomer(optionalCustomer.get());
+//			}
+//			else {
+//				// Customer customer=new Customer();
+//			 //individualCustomer.setCustomer(customer);
+//			}
+		 
+		    individualCustomer.setCustomerNumber(helperFunctions.createCustomerNumber());
+			individualCustomer.setFirstName(createIndividualCustomerRequest.getFirstName());
+			individualCustomer.setLastName(createIndividualCustomerRequest.getLastName());
+			individualCustomer.setTcKimlikNo(createIndividualCustomerRequest.getTcKimlikNo());
+			individualCustomer.setBirthDate(createIndividualCustomerRequest.getCustomerBirthDate());
+			System.out.println(responseObject.get("birthPlace").toString());
+			individualCustomer.setBirthPlace(createIndividualCustomerRequest.getCustomerBirthPlace());
+			this.customerRepository.save(individualCustomer);
 					 //this.modelMapperService.forRequest().map(createIndividualCustomerRequest, IndividualCustomer.class);
 		 individualCustomer.setPhoneNumber(createIndividualCustomerRequest.getPhoneNumber());
 		
 		 
-		 individualCustomer.setIndividualCustomerNumber(helperFunctions.createIndividualCustomerNumber());
+		 //individualCustomer.setIndividualCustomerNumber(helperFunctions.createIndividualCustomerNumber());
 		 //boş liste set etmeme gerek var mı bilmiyorum ben hepsini elle set ettim mapper belki null yapmıştır listeleri
 		 //sanırım customer nesnesi de oluşturmak gerekiyormuş
 		 this.individualCustomerRepository.save(individualCustomer);

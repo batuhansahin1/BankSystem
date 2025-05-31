@@ -23,11 +23,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class CorporateCustomer {
+public class CorporateCustomer extends Customer {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private int id;
 	
 	@Column(name = "v_kimlik_no",length = 10)
 	private String vergiKimlikNo;
@@ -38,22 +38,21 @@ public class CorporateCustomer {
 	
 	@Column(name="company_type")
 	private String companyType;
-	@Column(name = "corporate_customer_number",unique = true)
-	@Size(min = 13,max = 13)
-	private String corporateCustomerNumber;
+	
+//	@Column(name = "corporate_customer_number",unique = true)
+//	@Size(min = 13,max = 13)
+//	private String corporateCustomerNumber;
 	@Column(name = "corporate_phone")
 	private String corporatePhone;
 	
 	//keyfine yazdık pk refransı da verebilirdik sadece tcKimlikNoyu burada da tutup diğer tabloya join atmamak
 	//için bu kodu yazdık
-	@OneToOne
-	@JoinColumn(referencedColumnName = "tc_kimlik_no")
-	private Customer customer;
+//	@OneToOne
+//	@JoinColumn(referencedColumnName = "tc_kimlik_no")
+//	private Customer customer;
 	
-	@OneToMany(mappedBy = "corporateCustomer")
-	private List<CorporateAddress> corporateAddressList;
+	//ana tabloya referans verip corporateTürlerini sileceğiz
+	//direkt account olarak oluşturacağız ana tabloda
 
-	@OneToMany(mappedBy = "corporateCustomer")
-	private List<CorporateAccount> corporateAccounts;
 	
 }

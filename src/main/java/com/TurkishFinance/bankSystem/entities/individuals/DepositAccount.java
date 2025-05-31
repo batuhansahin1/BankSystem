@@ -1,4 +1,4 @@
-package com.TurkishFinance.bankSystem.entities.corporates;
+package com.TurkishFinance.bankSystem.entities.individuals;
 
 import com.TurkishFinance.bankSystem.entities.Account;
 
@@ -14,22 +14,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CorporateAccount {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+public class DepositAccount extends Account{
 
-	@OneToOne
-	@JoinColumn(referencedColumnName = "account_number")
-	private Account account;
+	private double rate;
+	/*
+	 * @Id
+	 * 
+	 * @GeneratedValue(strategy = GenerationType.IDENTITY) private int id;
+	 */
 	
-	@ManyToOne
-	@JoinColumn(referencedColumnName =  "corporate_customer_number")
-	private CorporateCustomer corporateCustomer;
+	/*
+	 * @OneToOne
+	 * 
+	 * @JoinColumn(referencedColumnName = "account_number") private Account account
+	 * ;
+	 */
 	
-	
+//	@ManyToOne
+//	@JoinColumn(referencedColumnName =  "individual_customer_number")
+//	private IndividualCustomer individualCustomer;
 }

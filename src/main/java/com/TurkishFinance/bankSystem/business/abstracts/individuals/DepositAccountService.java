@@ -9,7 +9,7 @@ import com.TurkishFinance.bankSystem.business.responses.GetAllIndividualAccounts
 import com.TurkishFinance.bankSystem.business.responses.GetIndividualAccountResponse;
 
 @Service
-public interface IndividualAccountService {
+public interface DepositAccountService {
 
 	
 	public List<GetAllIndividualAccountsResponse> getAll();

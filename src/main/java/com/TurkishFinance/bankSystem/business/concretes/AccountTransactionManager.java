@@ -128,10 +128,21 @@ public class AccountTransactionManager implements AccountTransactionService{
 			//direkt account ile customer bilgisini bağlasak nasıl olur
 			//ama yaratırken ndividualCustomerdan yaratamayız
 			//gpt ile hasbihal lazım
-			accountTransaction.setSenderFirstName(account.getIndividualAccount().getIndividualCustomer()
-					.getCustomer().getFirstName());
-			accountTransaction.setSenderLastName(account.getIndividualAccount()
-					.getIndividualCustomer().getCustomer().getLastName());
+			//çözüm aslında iki tabloyu account'un bir alt tablosu gibi yapmak yani isa ilişkisi
+			//şöyle ikisinin de pk'i accounttan referans alıcak böylece hangisinin hangisi olduğu karışmayacak
+			//ama bunu nasıl yapıcaz
+			//bana kalsa type'a göre enum yapıp geçerim ama ileride bu corporate'ye özel kampanyalar sunacağım
+			//individual'a özel kampanyalar sunacağım bu yüzden bu ekstra tabloların olması lazım
+			//onu individual customer ya da individual account'a bağlıcam mecbur ayrılması lazım ama bu idlerin
+			//ana tablodan gelmesi mantıklı bunu orm'de nasıl yapıcam biraz bunu araştıracam
+			//if else'i tek tablo yapmadığım sürece yok edemiyorum bu da open-closed prensibine aykırı bi bakıcaz
+			
+			//direkt individual ya da corporate'e sorgu atıcaz ilişki kaldırıldı
+			
+			//accountTransaction.setSenderFirstName(account.getIndividualAccount().getIndividualCustomer()
+			//		.getCustomer().getFirstName());
+			//accountTransaction.setSenderLastName(account.getIndividualAccount()
+				//	.getIndividualCustomer().getCustomer().getLastName());
 			accountTransaction.setTransferAmount(createTransactionRequest.getTransferAmount());
 			account.setTotalAmount(account.getTotalAmount()+(long)createTransactionRequest.getTransferAmount());
 			accountTransaction.setCurrency(account.getAccountCurrency());

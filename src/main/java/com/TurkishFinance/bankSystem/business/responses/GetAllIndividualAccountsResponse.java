@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 public class GetAllIndividualAccountsResponse {
 
 	
+	private int id;
 	private String individualCustomerTcKimlikNo;
-	private String accountIbanNumber;
+	private String ibanNumber;
 	private long accountTotalAmount;
 	private String individualCustomerIndividualCustomerNumber;
 	private String accountNumber;

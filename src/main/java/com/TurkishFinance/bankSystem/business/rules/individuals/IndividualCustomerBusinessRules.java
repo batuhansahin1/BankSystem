@@ -13,18 +13,23 @@ public class IndividualCustomerBusinessRules {
 
 	private IndividualCustomerRepository individualCustomerRepository;
 	
-	public void checkIfExistsByCustomerNumber(String individualCustomerNumber) {
+	
+	public void checkIfCustomerNumberExists(String individualCustomerNumber) {
 		
-		if(!this.individualCustomerRepository.existsByIndividualCustomerNumber(individualCustomerNumber)) {
-			System.out.println("böyle bir müşteri yok");
+		if(!this.individualCustomerRepository.existsByCustomerNumber(individualCustomerNumber)) {
+			throw new BusinessException("this customer number not exists in our system.Please try another one");
 		}
 	}
 	
-
+    public void checkIfCustomerNumberNotExists(String customerNumber) {
+    	if(this.individualCustomerRepository.existsByCustomerNumber(customerNumber)) {
+    		throw new BusinessException("this customer number exists.Please try another one");
+    	}
+    }
 
 	public void checkIfTcKimlikNoExists(String tcKimlikNo) {
 		
-		if(individualCustomerRepository.existsByCustomerTcKimlikNo(tcKimlikNo)) {
+		if(individualCustomerRepository.existsByTcKimlikNo(tcKimlikNo)) {
 			
 			throw new BusinessException("There is an individualCustomer with that tcKimlikNo you can not create one more");
 		}

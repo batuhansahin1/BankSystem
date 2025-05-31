@@ -9,7 +9,7 @@ import com.TurkishFinance.bankSystem.business.responses.GetCorporateAccountRespo
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 
-public interface CorporateAccountService {
+public interface DrawingAccountService {
 
 	GetCorporateAccountResponse getCorporateAccount(String accountNumber);
 
