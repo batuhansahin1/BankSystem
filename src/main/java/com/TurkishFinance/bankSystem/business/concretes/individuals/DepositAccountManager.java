@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.TurkishFinance.bankSystem.business.abstracts.individuals.DepositAccountService;
-import com.TurkishFinance.bankSystem.business.requests.CreateIndividualAccountRequest;
-import com.TurkishFinance.bankSystem.business.responses.GetAllIndividualAccountsResponse;
-import com.TurkishFinance.bankSystem.business.responses.GetIndividualAccountResponse;
+import com.TurkishFinance.bankSystem.business.requests.CreateDepositAccountRequest;
+
+import com.TurkishFinance.bankSystem.business.responses.GetAllDepositAccountsResponse;
+
+import com.TurkishFinance.bankSystem.business.responses.GetDepositAccountResponse;
+
 import com.TurkishFinance.bankSystem.business.rules.individuals.DepositAccountBusinessRules;
 
 import com.TurkishFinance.bankSystem.business.rules.individuals.IndividualCustomerBusinessRules;
@@ -43,12 +46,12 @@ public class DepositAccountManager implements DepositAccountService {
 	private final IndividualCustomerRepository individualCustomerRepository;
 	 
 	@Override
-	public List<GetAllIndividualAccountsResponse> getAll() {
+	public List<GetAllDepositAccountsResponse> getAll() {
 	
-		List<DepositAccount> individualAccounts=this.depositAccountRepository.findAll();
-		List<GetAllIndividualAccountsResponse> accountsResponse=individualAccounts.stream()
+		List<DepositAccount> depositAccounts=this.depositAccountRepository.findAll();
+		List<GetAllDepositAccountsResponse> accountsResponse=depositAccounts.stream()
 				.map(account->{
-					GetAllIndividualAccountsResponse getAllResponse=this.modelMapperService.forResponse().map(account, GetAllIndividualAccountsResponse.class);
+					GetAllDepositAccountsResponse getAllResponse=this.modelMapperService.forResponse().map(account, GetAllDepositAccountsResponse.class);
 						getAllResponse.setAccountNumber(account.getAccountNumber());
 						return getAllResponse;
 				}).collect(Collectors.toList());
@@ -57,11 +60,11 @@ public class DepositAccountManager implements DepositAccountService {
 
 
 	@Override
-	public GetIndividualAccountResponse get(String accountNumber) {
+	public GetDepositAccountResponse get(String accountNumber) {
 		this.depositAccountBusinessRules.checkIfAccountNumberExists(accountNumber);
 		DepositAccount individualAccount=this.depositAccountRepository.findByAccountNumber(accountNumber);
-		GetIndividualAccountResponse accountResponse=this.modelMapperService.forResponse()
-				.map(individualAccount,GetIndividualAccountResponse.class);
+		GetDepositAccountResponse accountResponse=this.modelMapperService.forResponse()
+				.map(individualAccount,GetDepositAccountResponse.class);
 		
 		 
 		return accountResponse;
@@ -69,14 +72,14 @@ public class DepositAccountManager implements DepositAccountService {
 
 
 	@Override
-	public void add(CreateIndividualAccountRequest createIndividualAccountRequest) {
+	public void add(CreateDepositAccountRequest createDepositAccountRequest) {
 		
 		this.individualCustomerBusinessRules
-		.checkIfCustomerNumberExists(createIndividualAccountRequest.getIndividualCustomerNumber());
+		.checkIfCustomerNumberExists(createDepositAccountRequest.getIndividualCustomerNumber());
 		//this.individualAccountBusinessRules.chekIfCustomerExists(createIndividualAccountRequest.getIndividualCustomerNumber());		
 	   //bu individualAccount döndürmek zorunda
 		 
-		IndividualCustomer individualCustomer=this.individualCustomerRepository.findByCustomerNumber(createIndividualAccountRequest.getIndividualCustomerNumber());
+		IndividualCustomer individualCustomer=this.individualCustomerRepository.findByCustomerNumber(createDepositAccountRequest.getIndividualCustomerNumber());
 		System.out.println(individualCustomer.getCustomerNumber());
 		
 		String accountNumber=helperFunctions.createAccountNumber();
@@ -85,7 +88,7 @@ public class DepositAccountManager implements DepositAccountService {
 	    .queryParam("personTcKimlikNo",individualCustomer.getTcKimlikNo())
 	    .queryParam("bankName", "ziraat").queryParam("vergiKimlikNo","1111111111")
 	    .queryParam("bankCode", "00001").queryParam("accountNo", accountNumber)
-	    .queryParam("accountCurrency", createIndividualAccountRequest.getAccountCurrency()).toUriString();
+	    .queryParam("accountCurrency", createDepositAccountRequest.getAccountCurrency()).toUriString();
 		
 	    try {
 			Map<String,Object> responseObject =helperFunctions.postAccount(uri);
@@ -95,7 +98,7 @@ public class DepositAccountManager implements DepositAccountService {
 			}
 			DepositAccount depositAccount=new DepositAccount();
 		    //Account account=new Account();
-		    depositAccount.setAccountCurrency(createIndividualAccountRequest.getAccountCurrency());
+		    depositAccount.setAccountCurrency(createDepositAccountRequest.getAccountCurrency());
 		    depositAccount.setAccountNumber(accountNumber);
 		    depositAccount.setIbanNumber(responseObject.get("ibanNumber").toString());
 		    depositAccount.setOpenedDate(LocalDate.now());

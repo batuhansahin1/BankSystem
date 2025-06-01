@@ -4,17 +4,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.TurkishFinance.bankSystem.business.requests.CreateIndividualAccountRequest;
-import com.TurkishFinance.bankSystem.business.responses.GetAllIndividualAccountsResponse;
-import com.TurkishFinance.bankSystem.business.responses.GetIndividualAccountResponse;
+import com.TurkishFinance.bankSystem.business.requests.CreateDepositAccountRequest;
+import com.TurkishFinance.bankSystem.business.responses.GetAllDepositAccountsResponse;
+import com.TurkishFinance.bankSystem.business.responses.GetDepositAccountResponse;
+
 
 @Service
 public interface DepositAccountService {
 
 	
-	public List<GetAllIndividualAccountsResponse> getAll();
-	public GetIndividualAccountResponse get(String customerNumber);
-    public void add(CreateIndividualAccountRequest createIndividualAccountRequest);
+	public List<GetAllDepositAccountsResponse> getAll();
+	public GetDepositAccountResponse get(String accountNumber);
+    public void add(CreateDepositAccountRequest createDepositAccountRequest);
     public void delete(String accountNumber);
     
 }

@@ -9,9 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetAllIndividualCustomersResponse {
 
-	private String customerFirstName;
-	private String customerLastName;
-	private String customerTcKimlikNo;
-	private String individualCustomerNumber;
+	//ilişki olmadığı için customerFirstName null dönüyor
+	//veritabanındaki kayıtlarda individual customerda firstName olmadığı için null dönüyor
+	
+	private String firstName;
+	private String lastName;
+	private String tcKimlikNo;
+	//extend ettiği için customer number
+	private String customerNumber;
 	private String phoneNumber;
 }

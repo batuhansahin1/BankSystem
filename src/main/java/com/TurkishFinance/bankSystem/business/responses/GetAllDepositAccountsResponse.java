@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAllIndividualAccountsResponse {
+public class GetAllDepositAccountsResponse {
 
 	
 	private int id;

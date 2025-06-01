@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.TurkishFinance.bankSystem.business.abstracts.corporates.DrawingAccountService;
-import com.TurkishFinance.bankSystem.business.requests.CreateCorporateAccountRequest;
-import com.TurkishFinance.bankSystem.business.requests.UpdateCorporateAccountRequest;
-import com.TurkishFinance.bankSystem.business.responses.GetAllCorporateAccountsResponse;
-import com.TurkishFinance.bankSystem.business.responses.GetCorporateAccountResponse;
+
+import com.TurkishFinance.bankSystem.business.requests.CreateDrawingAccountRequest;
+
+import com.TurkishFinance.bankSystem.business.requests.UpdateDrawingAccountRequest;
+
+import com.TurkishFinance.bankSystem.business.responses.GetAllDrawingAccountsResponse;
+
+import com.TurkishFinance.bankSystem.business.responses.GetDrawingAccountResponse;
 
 import lombok.AllArgsConstructor;
 
@@ -26,21 +30,21 @@ public class DrawingAccountsController {
 	private final DrawingAccountService drawingAccountService;
 	
 	@GetMapping("/get")
-	public GetCorporateAccountResponse get(String accountNumber) {
+	public GetDrawingAccountResponse get(String accountNumber) {
 
 		return this.drawingAccountService.getCorporateAccount(accountNumber);
 	}
 	
 	@GetMapping("/getAll")
-	public List<GetAllCorporateAccountsResponse> getAll(){
+	public List<GetAllDrawingAccountsResponse> getAll(){
 	
 		return this.drawingAccountService.getAll();
 	}
 	
 	@PostMapping("/add")
-	public void add(CreateCorporateAccountRequest createCorporateAccountRequest) throws Exception {
+	public void add(CreateDrawingAccountRequest createDrawingAccountRequest) throws Exception {
 		
-		this.drawingAccountService.add(createCorporateAccountRequest);
+		this.drawingAccountService.add(createDrawingAccountRequest);
 	}
 	
 	@DeleteMapping("delete")
@@ -49,7 +53,7 @@ public class DrawingAccountsController {
 		this.drawingAccountService.delete(accountNumber);
 	}
 	@PutMapping("update")
-	public void update(UpdateCorporateAccountRequest updateCorporateAccountRequest) {
-		this.drawingAccountService.update(updateCorporateAccountRequest);
+	public void update(UpdateDrawingAccountRequest updateDrawingAccountRequest) {
+		this.drawingAccountService.update(updateDrawingAccountRequest);
 	}
 }

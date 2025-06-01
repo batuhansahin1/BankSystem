@@ -16,7 +16,7 @@ import lombok.Data;
 //api request yapılması lazım class bu yüzden bunun içine
 //accountNumber ve amount ekleyeceğim hesabın pasif olu olmadığını da businessRules ile kontrol ederim
 @Data
-public class UpdateCorporateAccountRequest {
+public class UpdateDrawingAccountRequest {
 
 	private String accountNumber;
 	private long recievedAmount;

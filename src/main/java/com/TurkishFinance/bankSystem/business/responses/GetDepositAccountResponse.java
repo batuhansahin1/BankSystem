@@ -5,14 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-@Data
 @NoArgsConstructor
-public class GetCorporateAccountResponse {
+@Data
+public class GetDepositAccountResponse {
 
-	//mapper ile yapmıcam elle yapıcam
 	private String firstName;
 	private String lastName;
-	private String accountNumber;
 	private String accountIbanNumber;
 	private long accountTotalAmount;
 }

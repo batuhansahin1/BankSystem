@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateIndividualAccountRequest {
+public class CreateDepositAccountRequest {
 
 	@Size(min = 12,max = 12)
 	private String individualCustomerNumber;

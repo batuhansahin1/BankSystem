@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateCorporateAccountRequest {
+public class CreateDrawingAccountRequest {
 
 //buradan da çekebiiliriz corporateCustomer'ı veritabanından bu field ile çekicez 
 //diğer her şeyi kendimiz oluşturucaz

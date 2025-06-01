@@ -13,10 +13,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 
 import com.TurkishFinance.bankSystem.business.abstracts.corporates.DrawingAccountService;
-import com.TurkishFinance.bankSystem.business.requests.CreateCorporateAccountRequest;
-import com.TurkishFinance.bankSystem.business.requests.UpdateCorporateAccountRequest;
-import com.TurkishFinance.bankSystem.business.responses.GetAllCorporateAccountsResponse;
-import com.TurkishFinance.bankSystem.business.responses.GetCorporateAccountResponse;
+
+import com.TurkishFinance.bankSystem.business.requests.CreateDrawingAccountRequest;
+
+import com.TurkishFinance.bankSystem.business.requests.UpdateDrawingAccountRequest;
+
+import com.TurkishFinance.bankSystem.business.responses.GetAllDrawingAccountsResponse;
+
+import com.TurkishFinance.bankSystem.business.responses.GetDrawingAccountResponse;
 import com.TurkishFinance.bankSystem.business.rules.AccountBusinessRules;
 import com.TurkishFinance.bankSystem.business.rules.CustomerBusinessRules;
 
@@ -53,32 +57,32 @@ public class DrawingAccountManager implements DrawingAccountService {
 	
 	
 	@Override
-	public GetCorporateAccountResponse getCorporateAccount(String accountNumber) {
+	public GetDrawingAccountResponse getCorporateAccount(String accountNumber) {
 		
 	   this.accountBusinessRules.checkIfAccountNumberExists(accountNumber);
 	   DrawingAccount drawingAccount=this.drawingAccountRepository.findByAccountNumber(accountNumber);
-	   GetCorporateAccountResponse getCorporateAccountResponse=this.modelMapperService.forResponse().map(drawingAccount, GetCorporateAccountResponse.class);
-	   getCorporateAccountResponse.setAccountNumber(drawingAccount.getAccountNumber());
+	   GetDrawingAccountResponse getDrawingAccountResponse=this.modelMapperService.forResponse().map(drawingAccount, GetDrawingAccountResponse.class);
+	   getDrawingAccountResponse.setAccountNumber(drawingAccount.getAccountNumber());
 		
-		return getCorporateAccountResponse;
+		return getDrawingAccountResponse;
 	}
 
 	@Override
-	public List<GetAllCorporateAccountsResponse> getAll() {
+	public List<GetAllDrawingAccountsResponse> getAll() {
 		
 		//GetAllCorporateAccountsResponse getAllCorporateAccountsResponse=new GetAllCorporateAccountsResponse();
-		List<DrawingAccount> corporateAccounts=drawingAccountRepository.findAll();
-		List<GetAllCorporateAccountsResponse> corporateAccountList=corporateAccounts.stream()
+		List<DrawingAccount> drawingAccounts=drawingAccountRepository.findAll();
+		List<GetAllDrawingAccountsResponse> drawingAccountList=drawingAccounts.stream()
 				.map(account->this.modelMapperService.forResponse()
-						.map(account, GetAllCorporateAccountsResponse.class))
+						.map(account, GetAllDrawingAccountsResponse.class))
 				.collect(Collectors.toList());
 		
 		
-		return corporateAccountList;
+		return drawingAccountList;
 	}
 
 	@Override
-	public void add(CreateCorporateAccountRequest createCorporateAccountRequest) throws Exception {
+	public void add(CreateDrawingAccountRequest createDrawingAccountRequest) throws Exception {
 		// TODO Auto-generated method stub
 		//yapılacak adımlar bankaya gelen createCorporateAccountRequestte ilk olarak tcKimlikNo ve 
 		//corporateCustomerNumber a ait olan kişiyi ve şirketin bilgilerinin bulucaz
@@ -88,7 +92,7 @@ public class DrawingAccountManager implements DrawingAccountService {
 		//bütün tablolarda örnek oluşturucaz
 		//yine corporate diye ayırmak zorunda kalabiliriz merkez bankası için söylüyrum bunu
 		//corporateCustomerBusinessRules.checkIfCorporateCustomerNumberExists(createCorporateAccountRequest.getCorporateCustomerNumber());
-		CorporateCustomer corporateCustomer=this.corporateCustomerRepository.findByCustomerNumber(createCorporateAccountRequest.getCorporateCustomerNumber());
+		CorporateCustomer corporateCustomer=this.corporateCustomerRepository.findByCustomerNumber(createDrawingAccountRequest.getCorporateCustomerNumber());
 		//bu customer'a ait bilgilerle request yapıcaz
 		//accountNo'yu da biz oluşturucaz 00000000000000001
   
@@ -106,7 +110,7 @@ public class DrawingAccountManager implements DrawingAccountService {
 				.queryParam("companyVkn", corporateCustomer.getVergiKimlikNo())        		
 				.queryParam("bankName", "ziraat").queryParam("vergiKimlikNo","1111111111")
         		.queryParam("bankCode", "00001").queryParam("accountNo",accountNumber)
-        		.queryParam("accountCurrency",createCorporateAccountRequest.getAccountCurrency()).toUriString();
+        		.queryParam("accountCurrency",createDrawingAccountRequest.getAccountCurrency()).toUriString();
 		System.out.println(uri);
      Map<String, Object> fastSystemResponse=helperFunctions.postAccount(uri);
 	System.out.println(fastSystemResponse);	
@@ -121,7 +125,7 @@ public class DrawingAccountManager implements DrawingAccountService {
 	  //account'u save yapıcam unutmuşum
 	    DrawingAccount drawingAccount=new DrawingAccount();
         Account account=new Account();
-        drawingAccount.setAccountCurrency(createCorporateAccountRequest.getAccountCurrency());
+        drawingAccount.setAccountCurrency(createDrawingAccountRequest.getAccountCurrency());
         drawingAccount.setAccountNumber(accountNumber); 
 	   //responseda gelicek
         drawingAccount.setIbanNumber(fastSystemResponse.get("ibanNumber").toString());
@@ -151,11 +155,11 @@ public class DrawingAccountManager implements DrawingAccountService {
 	}
 
 	@Override
-	public void update(UpdateCorporateAccountRequest updateCorporateAccountRequest) {
+	public void update(UpdateDrawingAccountRequest updateDrawingAccountRequest) {
 		// TODO Auto-generated method stub
-		accountBusinessRules.chickIfAccountIsPassive(updateCorporateAccountRequest.getAccountNumber());
-		Account account=accountRepository.findByAccountNumber(updateCorporateAccountRequest.getAccountNumber());
-		account.setTotalAmount(account.getTotalAmount()+updateCorporateAccountRequest.getRecievedAmount());
+		accountBusinessRules.chickIfAccountIsPassive(updateDrawingAccountRequest.getAccountNumber());
+		Account account=accountRepository.findByAccountNumber(updateDrawingAccountRequest.getAccountNumber());
+		account.setTotalAmount(account.getTotalAmount()+updateDrawingAccountRequest.getRecievedAmount());
 		accountRepository.save(account);
 		
 		
